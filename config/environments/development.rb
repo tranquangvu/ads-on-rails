@@ -31,4 +31,8 @@ AdwordsOnRails::Application.configure do
   # Eager loads all eager_load_namespaces, including the application and Rails
   # frameworks.
   config.eager_load = false
+
+  # devise config require
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  
 end

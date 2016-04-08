@@ -1,0 +1,10 @@
+- if @error
+  .notice
+    An error occurred during report retrieval:
+    %br
+      = @error
+- else
+  = @report_data
+#local-footer
+  %span.small-print
+    %a{:href => "#", :onClick => "history.back();"} Back

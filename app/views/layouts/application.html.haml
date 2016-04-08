@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title S2photo
+    %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet", :type => "text/css"}
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': true
+    = javascript_include_tag 'application', 'data-turbolinks-track': true
+    = csrf_meta_tags
+  %body
+    #global-header
+      - account_text = (@selected_account.nil?) ? 'Not selected' : @selected_account
+      %span
+        Active account: #{account_text}
+    #global-alert
+      - flash.each do |name, msg|
+        = content_tag :div, msg, class: [:alert, alert_for(name)]
+    = yield
+    #global-footer
+      %span.small-print= link_to('Log out', login_logout_path)

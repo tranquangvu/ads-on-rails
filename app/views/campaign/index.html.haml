@@ -1,0 +1,29 @@
+%h1 Campaigns list
+- if @selected_account.nil?
+  .notice No account selected!
+- else
+  - if @campaigns.nil? or @campaigns.empty?
+    %ul
+      %li No campaigns available.
+  - else
+    %ul
+      %li
+        Total number of campaigns: #{@campaign_count}
+    %table
+      %tr
+        %th
+          ID
+          %th
+            Name
+            %th
+              Status
+              - @campaigns.each do |id, campaign|
+                %tr
+                  %td
+                    = campaign.id
+                    %td
+                      = campaign.name
+                      %td
+                        = campaign.status
+#local-footer
+  %span.small-print= link_to("Back to home", home_index_path)

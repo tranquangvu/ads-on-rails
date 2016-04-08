@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# Use postgresql as the database for Active Record
+gem 'pg', '~> 0.18.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -35,6 +34,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'rspec-rails', '~> 3.4', '>= 3.4.2'
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -50,5 +51,10 @@ gem 'google-adwords-api', '~> 0.18.0'
 
 # Gem for OAuth authorization.
 gem 'oauth2'
-
 gem 'activerecord-session_store'
+
+# other gem
+gem 'haml', '~> 4.0', '>= 4.0.7'
+gem 'simple_form', '~> 3.2', '>= 3.2.1'
+gem 'bootstrap-sass', '~> 3.3', '>= 3.3.6'
+gem 'devise', '~> 3.5', '>= 3.5.6'

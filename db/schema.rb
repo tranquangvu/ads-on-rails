@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20110823220412) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
@@ -20,7 +23,7 @@ ActiveRecord::Schema.define(version: 20110823220412) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at"
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
 end

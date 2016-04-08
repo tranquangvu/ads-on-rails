@@ -1,0 +1,8 @@
+%h1 Authorization required
+- if flash[:alert]
+  .alert= flash[:alert]
+- if flash[:notice]
+  .notice= flash[:notice]
+%p Please authorize with a google account first:
+%p
+  %a{:href => @login_url} Proceed

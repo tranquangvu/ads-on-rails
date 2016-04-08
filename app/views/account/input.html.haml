@@ -1,0 +1,15 @@
+%h1 Manually set account ID
+%p
+  You can use this method to select an account when your token is not yet approved and you can not use AdWords manager account services to retrieve accounts list. In this case type in your
+  %a{:href => "https://developers.google.com/adwords/api/docs/test-accounts"} Test Account
+  CID manually into the field below.
+= form_tag('/account/select', :method => 'get') do
+  .input-form-item
+    Account clientCustomerID:
+    %input{:name => "account_id", :size => "80", :value => "XXX-XXX-XXXX"}
+  .input-form-item
+    %input{:type => "submit", :value => "Set account ID"}
+%br/
+%br/
+#local-footer
+  %span.small-print= link_to('Back to home', home_index_path)
