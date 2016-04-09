@@ -16,4 +16,6 @@
         = content_tag :div, msg, class: [:alert, get_alert_class_by_name(name)]
     = yield
     #global-footer
-      %span.small-print= link_to('Log out', ads_google_login_logout_path)
+      %span.small-print= link_to 'Log out ads on rails', destroy_user_session_path, method: :delete
+      |
+      %span.small-print= link_to 'Log out google account', ads_google_login_logout_path

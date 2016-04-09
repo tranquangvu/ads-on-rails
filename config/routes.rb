@@ -1,5 +1,5 @@
 AdwordsOnRails::Application.routes.draw do
-  devise_for :users
+  devise_for :users, :controllers => { registrations: 'registrations' }
 
   namespace :ads do
     namespace :google do

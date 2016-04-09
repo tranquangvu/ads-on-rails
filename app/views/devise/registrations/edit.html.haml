@@ -3,13 +3,22 @@
 = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
   = f.error_notification
   .form-inputs
-    = f.input :email, required: true, autofocus: true
+    / User profile
+    = f.input :username, required: true, autofocus: true
+    = f.input :email, required: true
     - if devise_mapping.confirmable? && resource.pending_reconfirmation?
       %p
         Currently waiting confirmation for: #{resource.unconfirmed_email}
     = f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false
     = f.input :password_confirmation, required: false
     = f.input :current_password, hint: "we need your current password to confirm your changes", required: true
+
+    / Ads profile
+    = f.input :company_name, required: true
+    = f.input :company_url, required: true
+    = f.input :advertiser_type_id, collection: User::ADVERTISER_TYPES.collect { |x| [x, User::ADVERTISER_TYPES.index(x)] }, prompt: 'Choose One'
+    = f.input :target_audience_id, collection: User::TARGET_AUDIENCE.collect { |x| [x, User::TARGET_AUDIENCE.index(x)] }, prompt: 'Choose One'
+    = f.input :monthly_spend_id, collection: User::AVERAGE_MONTHLY_SPEND.collect { |x| [x, User::AVERAGE_MONTHLY_SPEND.index(x)]}, prompt: 'Choose One'
   .form-actions
     = f.button :submit, "Update"
 %h3 Cancel my account
