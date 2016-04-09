@@ -1,5 +1,4 @@
-class AccountController < ApplicationController
-
+class Ads::Google::AccountController < Ads::Google::MasterController
   def index()
     @selected_account = selected_account
     graph = get_accounts_graph()
@@ -9,7 +8,7 @@ class AccountController < ApplicationController
   def select()
     self.selected_account = params[:account_id]
     flash[:notice] = "Selected account: %s" % selected_account
-    redirect_to home_index_path
+    redirect_to ads_google_dashboard_index_path
   end
 
   private

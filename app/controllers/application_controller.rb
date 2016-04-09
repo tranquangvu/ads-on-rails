@@ -1,54 +1,19 @@
-require 'adwords_api'
-
 class ApplicationController < ActionController::Base
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery with: :exception
 
-  before_filter :authenticate
-  protect_from_forgery
+  # go to current page after login in devise
+  # before_filter :set_return_path
 
-  private
+  # private
+    # def after_sign_in_path_for(resource) 
+    #   session["user_return_to"] || root_url 
+    # end
 
-  # Returns the API version in use.
-  def get_api_version()
-    return :v201509
-  end
-
-  # Returns currently selected account.
-  def selected_account()
-    @selected_account ||= session[:selected_account]
-    return @selected_account
-  end
-
-  # Sets current account to the specified one.
-  def selected_account=(new_selected_account)
-    @selected_account = new_selected_account
-    session[:selected_account] = @selected_account
-  end
-
-  # Checks if we have a valid credentials.
-  def authenticate()
-    token = session[:token]
-    redirect_to login_prompt_path if token.nil?
-    return !token.nil?
-  end
-
-  # Returns an API object.
-  def get_adwords_api()
-    @api ||= create_adwords_api()
-    return @api
-  end
-
-  # Creates an instance of AdWords API class. Uses a configuration file and
-  # Rails config directory.
-  def create_adwords_api()
-    config_filename = File.join(Rails.root, 'config', 'adwords_api.yml')
-    @api = AdwordsApi::Api.new(config_filename)
-    token = session[:token]
-    # If we have an OAuth2 token in session we use the credentials from it.
-    if token
-      credentials = @api.credential_handler()
-      credentials.set_credential(:oauth2_token, token)
-      credentials.set_credential(:client_customer_id, selected_account)
-    end
-    return @api
-  end
+    # def set_return_path
+    #   unless devise_controller? || request.xhr? || !request.get?
+    #     session["user_return_to"] = request.url
+    #   end
+    # end
 end

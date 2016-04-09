@@ -1,0 +1,12 @@
+%h1 Welcome to the AdWords on Rails demo application
+%p Start by selecting an account.
+#main-menu
+  %ol
+    %li
+      = link_to("List Accounts", ads_google_account_index_path)
+      %li
+        = link_to("Enter Test Account ID", ads_google_account_input_path)
+        %li
+          = link_to("List Campaigns", ads_google_campaign_index_path)
+          %li
+            = link_to("Retrieve a report", ads_google_report_index_path)

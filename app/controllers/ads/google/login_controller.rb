@@ -1,7 +1,7 @@
 require 'adwords_api'
 
-class LoginController < ApplicationController
-
+class Ads::Google::LoginController < Ads::Google::MasterController
+  
   skip_before_filter :authenticate
 
   GOOGLE_LOGOUT_URL = 'https://www.google.com/accounts/Logout'
@@ -9,10 +9,10 @@ class LoginController < ApplicationController
   def prompt()
     api = get_adwords_api()
     if session[:token]
-      redirect_to home_index_path
+      redirect_to ads_google_dashboard_index_path
     else
       begin
-        token = api.authorize({:oauth2_callback => login_callback_url})
+        token = api.authorize({:oauth2_callback => ads_google_login_callback_url})
       rescue AdsCommon::Errors::OAuth2VerificationRequired => e
         @login_url = e.oauth_url
       end
@@ -24,15 +24,15 @@ class LoginController < ApplicationController
     begin
       session[:token] = api.authorize(
           {
-            :oauth2_callback => login_callback_url,
+            :oauth2_callback => ads_google_login_callback_url,
             :oauth2_verification_code => params[:code]
           }
       )
       flash.notice = 'Authorized successfully'
-      redirect_to home_index_path
+      redirect_to ads_google_dashboard_index_path
     rescue AdsCommon::Errors::OAuth2VerificationRequired => e
       flash.alert = 'Authorization failed'
-      redirect_to login_prompt_path
+      redirect_to ads_google_login_prompt_path
     end
   end
 

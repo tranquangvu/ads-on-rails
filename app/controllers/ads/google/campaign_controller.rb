@@ -1,5 +1,5 @@
-class CampaignController < ApplicationController
-
+class Ads::Google::CampaignController < Ads::Google::MasterController
+  
   PAGE_SIZE = 50
 
   def index()

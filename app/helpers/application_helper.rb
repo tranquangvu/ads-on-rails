@@ -1,10 +1,10 @@
 module ApplicationHelper
-  def alert_for(flash_type)
+  def get_alert_class_by_name(name)
     {
       :success => 'alert-success',
       :error => 'alert-danger',
       :alert => 'alert-warning',
       :notice => 'alert-info'
-    }[flash_type.to_sym] || flash_type.to_s
+    }[name.to_sym] || name.to_s
   end
 end

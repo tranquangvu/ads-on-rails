@@ -1,8 +1,8 @@
 # See this document for reference:
 #   https://developers.google.com/adwords/api/docs/appendix/reports
 
-class ReportController < ApplicationController
-
+class Ads::Google::ReportController < Ads::Google::MasterController
+  
   REPORT_DEFINITION_TEMPLATE = {
     :selector => {
       :fields => []

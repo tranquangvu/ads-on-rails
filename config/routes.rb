@@ -1,18 +1,27 @@
 AdwordsOnRails::Application.routes.draw do
-  get "home/index"
+  devise_for :users
 
-  get "campaign/index"
+  namespace :ads do
+    namespace :google do
+      get "campaign/index"
 
-  get "account/index"
-  get "account/input"
-  get "account/select"
+      get "account/index"
+      get "account/input"
+      get "account/select"
 
-  get "login/prompt"
-  get "login/callback"
-  get "login/logout"
+      get "login/prompt"
+      get "login/callback"
+      get "login/logout"
 
-  get "report/index"
-  post "report/get"
+      get "report/index"
+      post "report/get"
 
-  root :to => "home#index"
+      get "dashboard/index"
+      root "dashboard#index"
+    end
+    get "global_dashboard/index"
+    root "global_dashboard#index"
+  end
+
+  root "home#index"
 end
