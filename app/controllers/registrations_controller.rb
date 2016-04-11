@@ -1,7 +1,7 @@
 class RegistrationsController < Devise::RegistrationsController
   protected
   def after_sign_up_path_for(resource)
-    ads_root_path
+    after_signup_path(:ads_profile_creation)
   end
 
   private

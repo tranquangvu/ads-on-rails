@@ -4,4 +4,126 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font";
 
+// color define
+$white: #FFF;
+$white_dark_1: #e0e0e0;
+$orange: #ffc107;
+$orange_hover: #ffa000;
+
+body{
+  font-family: "Raleway", sans-serif;
+  background: asset_url('devise/bg_form.jpg');
+  background-size: cover;
+  color: $white;
+  overflow-x: hidden;
+}
+
+a{
+  text-decoration: none;
+  trasition: all ease .3s;
+}
+
+.link{
+  display: block;
+  margin: 10px 0;
+  color: $orange;
+
+  &:hover{
+    color: $orange_hover;
+  }
+}
+
+.devise-form{
+  margin: 70px auto 0 auto;
+  max-width: 520px;
+  padding: 0 40px 50px 40px;
+  background: rgba(158, 158, 158, 0.3);
+  border-radius: 8px;
+  text-align: center;
+
+  h1{
+    margin: 0 -40px 30px -40px;
+    font-weight: 600;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: rgba(158, 158, 158, 0.3);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .form-control{
+    margin-top: 25px;
+    padding: 0 15px;
+    height: 55px;
+    box-shadow: none;
+    border-radius: 0;
+    border: 2px solid $white;
+    color: $white;
+    background: transparent;
+
+    &:focus{
+      border-color: $orange !important;
+      color: $orange !important;
+    }
+
+    &:-webkit-input-placeholder{
+      color: $white_dark_1;
+    }
+
+    &:-moz-placeholder{
+      color: $white_dark_1;
+    }
+
+    &:-ms-input-placeholder{
+      color: $white_dark_1;  
+    }
+  }
+}
+
+.btn-main{
+  margin-top: 25px;
+  color: $white;
+  font-family: 'Roboto Mono';
+  font-weight: bold;
+  text-transform: uppercase;
+  background: transparent;
+  padding: 20px 40px;
+  border: 2px solid $white;
+  transition: all ease .3s;
+  width: 100%;
+  border-radius: 0;
+
+  &:hover{
+    background: $orange; 
+    border-color: $orange;  
+  }
+}
+
+.checkbox{
+  margin: 25px 0 0 20px;
+  text-align: left;
+}
+
+.shared-links{
+  margin-top: 25px;
+}
+
+.error{
+  display: block;
+  text-align: right;
+  color: $orange;
+  font-style: italic;
+}
+
+.error_notification{
+  color: $orange;
+}
+
+.alert{
+  width: 230px;
+  position: fixed;
+  right: 20px;
+  bottom: 10px;
+}
