@@ -5,8 +5,6 @@ class User < ActiveRecord::Base
   TARGET_AUDIENCE = [ "I sell to businesses (B2B)", "I sell to consumers (B2C)", "Both"]  
   AVERAGE_MONTHLY_SPEND = ["Under $2500", "$2500 - $10000", "$10000 - $50000", "$50000 - $100000", "Over $100000"]
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 

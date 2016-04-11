@@ -20,9 +20,11 @@ AdwordsOnRails::Application.routes.draw do
       get "dashboard/index"
       root "dashboard#index"
     end
+
     get "global_dashboard/index"
     root "global_dashboard#index"
   end
 
+  get "home/index"
   root "home#index"
 end

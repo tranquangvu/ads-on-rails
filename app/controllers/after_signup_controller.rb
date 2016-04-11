@@ -1,6 +1,5 @@
 class AfterSignupController < ApplicationController
   layout 'devise'
-
   include Wicked::Wizard
   steps :ads_profile_creation
 
@@ -18,6 +17,10 @@ class AfterSignupController < ApplicationController
 
   def finish_wizard_path
     ads_root_path
+  end
+
+  def redirect_to_finish_wizard(options = nil)
+    redirect_to finish_wizard_path , notice: "Thanks you for sign up. Welcome to BStage!"
   end
 
   private
