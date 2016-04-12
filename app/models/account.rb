@@ -1,13 +1,11 @@
 class Account
-  attr_reader :customer_id
-  attr_reader :company_name
-
+  attr_reader :customer_id, :company_name, :name, :child_accounts
   attr_accessor :parent
-  attr_reader :child_accounts
 
   def initialize(api_account)
     @customer_id = api_account[:customer_id]
     @company_name = api_account[:company_name]
+    @name = api_account[:name]
     @child_accounts = []
   end
 

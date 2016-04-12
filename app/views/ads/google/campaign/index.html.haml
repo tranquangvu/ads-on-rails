@@ -1,29 +1,32 @@
 %h1 Campaigns list
-- if @selected_account.nil?
-  .notice No account selected!
+- if @campaigns.nil? or @campaigns.empty?
+  %ul
+    %li No campaigns available.
 - else
-  - if @campaigns.nil? or @campaigns.empty?
-    %ul
-      %li No campaigns available.
-  - else
-    %ul
-      %li
-        Total number of campaigns: #{@campaign_count}
-    %table
+  %table
+    %tr
+      %th
+        ID
+      %th
+        Name
+      %th
+        User Account
+      %th
+        Status
+      %th
+        Budget
+    - @campaigns.each do |id, campaign|
       %tr
-        %th
-          ID
-          %th
-            Name
-            %th
-              Status
-              - @campaigns.each do |id, campaign|
-                %tr
-                  %td
-                    = campaign.id
-                    %td
-                      = campaign.name
-                      %td
-                        = campaign.status
+        %td
+          = campaign.id
+        %td
+          = campaign.name
+        %td
+          = campaign.owner
+        %td
+          = campaign.status
+        %td
+          = campaign.budget
 #local-footer
   %span.small-print= link_to("Back to home", ads_google_dashboard_index_path)
+  
