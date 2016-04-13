@@ -18,7 +18,7 @@
     - @campaigns.each do |id, campaign|
       %tr
         %td
-          = campaign.id
+          = link_to campaign.id, ads_google_campaign_path(campaign.id)
         %td
           = campaign.name
         %td
