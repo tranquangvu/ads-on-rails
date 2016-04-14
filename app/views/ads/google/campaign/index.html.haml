@@ -15,18 +15,22 @@
         Status
       %th
         Budget
+      %th
+        Advertising Channel Type
     - @campaigns.each do |id, campaign|
       %tr
         %td
-          = link_to campaign.id, ads_google_campaign_path(campaign.id)
+          = link_to campaign.id, ads_google_campaign_path(campaign.owner[:id], campaign.id)
         %td
-          = campaign.name
+          = link_to campaign.name, ads_google_campaign_path(campaign.owner[:id], campaign.id)
         %td
-          = campaign.owner
+          = campaign.owner[:name]
         %td
           = campaign.status
         %td
           = campaign.budget
+        %td
+          = campaign.advertising_channel_type
 #local-footer
   %span.small-print= link_to("Back to home", ads_google_dashboard_index_path)
   

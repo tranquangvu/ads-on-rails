@@ -1,13 +1,14 @@
 class Ads::Google::CampaignController < Ads::Google::MasterController
   
   PAGE_SIZE = 50
-
+  
   def index
     @campaigns = selected_account ? get_campaigns_of_this_account : get_campaigns_of_accounts
   end
 
   def show
-    @id = params[:id]
+    response = request_campaign_by_id(params[:id].to_i, params[:owner_id].to_i)
+    @campaign = Campaign.get_campaigns_list(response).first[1] if response
   end
 
   private
@@ -37,7 +38,7 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
           clients_campaigns = Campaign.get_campaigns_list(response)
           # set owner for campaigns
           clients_campaigns.each do |_, campaign|
-            campaign.owner = account.name
+            campaign.owner = { :id => account.customer_id, :name => account.name }
           end
           # sort campaigns by key(campaign_id)
           campaigns = Hash[campaigns.merge!(clients_campaigns).sort]
@@ -56,13 +57,41 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
       api = get_adwords_api()
       service = api.service(:CampaignService, get_api_version())
       selector = {
-        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount'],
+        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
         :ordering => [{:field => 'Id', :sort_order => 'ASCENDING'}],
         :paging => {:start_index => 0, :number_results => PAGE_SIZE}
       }
       result = nil
       begin
         result = service.get(selector)
+      rescue AdwordsApi::Errors::ApiException => e
+        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
+        flash.now[:alert] = 'API request failed with an error, see logs for details'
+      end
+      return result
+    end
+
+    def request_campaign_by_id(campaign_id, owner_id)
+      api = get_adwords_api()
+      service = api.service(:CampaignService, get_api_version())
+      old_client_customer_id = api.credential_handler.credentials[:client_customer_id]
+      api.credential_handler.set_credential(:client_customer_id, owner_id)
+      selector = {
+        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
+        :ordering => [{:field => 'Name', :sort_order => 'ASCENDING'}],
+        :predicates => [
+          {
+            :field => 'Id',
+            :operator => 'EQUALS',
+            :values => [campaign_id]
+          }
+        ],
+        :paging => {:start_index => 0, :number_results => PAGE_SIZE}
+      }
+      result = nil
+      begin
+        result = service.get(selector)
+        api.credential_handler.set_credential(:client_customer_id, old_client_customer_id)
       rescue AdwordsApi::Errors::ApiException => e
         logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
         flash.now[:alert] = 'API request failed with an error, see logs for details'
