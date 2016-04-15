@@ -17,9 +17,8 @@ AdwordsOnRails::Application.routes.draw do
 
       get "report/index"
       post "report/get"
-
-      get "dashboard/index"
-      root "dashboard#index"
+      
+      root "account#index"
     end
 
     get "global_dashboard/index"

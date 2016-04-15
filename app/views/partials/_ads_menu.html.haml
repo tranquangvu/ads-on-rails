@@ -1,0 +1,80 @@
+.menubar-fixed-panel
+  %div
+    %a.btn.btn-icon-toggle.btn-default.menubar-toggle{"data-toggle" => "menubar"}
+      %i.fa.fa-bars
+  .expanded
+    = link_to ads_root_path do
+      %span.text-lg.text-bold.text-primary MATERIAL&nbsp;ADMIN
+.nano.has-scrollbar{:style => "height: 254px;"}
+  .nano-content{:style => "right: -15px;", :tabindex => "0"}
+    .menubar-scroll-panel{:style => "padding-bottom: 55px;"}
+      .menubar-head-panel
+        / 
+      %ul#main-menu.gui-controls
+        %li.active.expanding.expanded
+          = link_to ads_root_path, class: 'active' do
+            .gui-icon
+              %i.md.md-home
+            %span.title Dashboard
+        %li.gui-folder
+          %a
+            .gui-icon
+              %i.fa.fa-puzzle-piece.fa-fw
+            %span.title Networks
+          %ul
+            %li
+              = link_to '#' do
+                %span.title Google
+            %li
+              = link_to '#' do
+                %span.title Facebook
+        %li.gui-folder
+          %a
+            .gui-icon
+              %i.fa.fa-google.fa-fw
+            %span.title Google Adwords
+          %ul
+            %li
+              = link_to ads_google_account_index_path do
+                %span.title Accounts
+            %li
+              = link_to ads_google_account_input_path do
+                %span.title Enter Test Account ID
+            %li
+              = link_to ads_google_campaigns_path do
+                %span.title Campaigns
+            %li
+              = link_to ads_google_report_index_path do
+                %span.title Report Center
+            %li
+              = link_to ads_google_login_logout_path do
+                %span.title Log Out
+        %li.gui-folder
+          %a
+            .gui-icon
+              %i.fa.fa-facebook.fa-fw
+            %span.title Facebook Ads
+          %ul
+            %li
+              = link_to ads_google_account_index_path do
+                %span.title Accounts
+            %li
+              = link_to ads_google_account_input_path do
+                %span.title Enter Test Account ID
+            %li
+              = link_to ads_google_campaigns_path do
+                %span.title Campaigns
+            %li
+              = link_to ads_google_report_index_path do
+                %span.title Report Center
+        %li
+          = link_to "#" do
+            .gui-icon
+              %i.md.md-assessment
+            %span.title Master Report
+      .menubar-foot-panel
+        %small.no-linebreak.hidden-folded
+          %span.opacity-75 Copyright © 2014
+          %strong CodeCovers
+  .nano-pane{:style => "display: block;"}
+    .nano-slider{:style => "height: 113px; transform: translate(0px, 0px);"}

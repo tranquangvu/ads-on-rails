@@ -1,0 +1,96 @@
+%header#header
+  .headerbar
+    .headerbar-left
+      %ul.header-nav.header-nav-options
+        %li.header-nav-brand
+          .brand-holder
+            = link_to ads_root_path do
+              %span.text-lg.text-bold.text-primary BSTAGE ADS MANAGER
+        %li
+          %a.btn.btn-icon-toggle.menubar-toggle{"data-toggle" => "menubar"}
+            %i.fa.fa-bars
+    .headerbar-right
+      %ul.header-nav.header-nav-options
+        %li
+          %form.navbar-search{:role => "search"}
+            .form-group
+              %input.form-control{:name => "headerSearch", :placeholder => "Enter your keyword", :type => "text"}
+            %button.btn.btn-icon-toggle.ink-reaction{:type => "submit"}
+              %i.fa.fa-search
+        %li.dropdown.hidden-xs
+          %a.btn.btn-icon-toggle.btn-default{"data-toggle" => "dropdown"}
+            %i.fa.fa-bell
+            %sup.badge.style-danger 4
+          %ul.dropdown-menu.animation-expand
+            %li.dropdown-header Today's messages
+            %li
+              %a.alert.alert-callout.alert-warning
+                = image_tag('avatar1.jpg', alt: '', class: 'pull-right img-circle dropdown-avatar')
+                %strong Alex Anistor
+                %br/
+                %small Testing functionality...
+            %li
+              %a.alert.alert-callout.alert-info
+                = image_tag('avatar1.jpg', alt: '', class: 'pull-right img-circle dropdown-avatar')
+                %strong Alicia Adell
+                %br/
+                %small Reviewing last changes...
+            %li.dropdown-header Options
+            %li
+              %a{:href => "../../html/pages/login.html"}
+                View all messages
+                %span.pull-right
+                  %i.fa.fa-arrow-right
+            %li
+              %a{:href => "../../html/pages/login.html"}
+                Mark as read
+                %span.pull-right
+                  %i.fa.fa-arrow-right
+        %li.dropdown.hidden-xs
+          %a.btn.btn-icon-toggle.btn-default{"data-toggle" => "dropdown"}
+            %i.fa.fa-area-chart
+          %ul.dropdown-menu.animation-expand
+            %li.dropdown-header Server load
+            %li.dropdown-progress
+              %a
+                .dropdown-label
+                  %span.text-light
+                    Server load
+                    %strong Today
+                  %strong.pull-right 93%
+                .progress
+                  .progress-bar.progress-bar-danger{:style => "width: 93%"}
+            %li.dropdown-progress
+              %a
+                .dropdown-label
+                  %span.text-light
+                    Server load
+                    %strong Yesterday
+                  %strong.pull-right 30%
+                .progress
+                  .progress-bar.progress-bar-success{:style => "width: 30%"}
+            %li.dropdown-progress
+              %a
+                .dropdown-label
+                  %span.text-light
+                    Server load
+                    %strong Lastweek
+                  %strong.pull-right 74%
+                .progress
+                  .progress-bar.progress-bar-warning{:style => "width: 74%"}
+      %ul.header-nav.header-nav-profile
+        %li.dropdown
+          %a.dropdown-toggle.ink-reaction{"data-toggle" => "dropdown"}
+            = image_tag('avatar1.jpg', alt: '')
+            %span.profile-info
+              = current_user.username
+              %small
+                = current_user.email
+          %ul.dropdown-menu.animation-dock
+            %li.dropdown-header Config
+            %li
+              = link_to "My profile", "#"
+            %li
+              = link_to destroy_user_session_path, method: :delete do
+                %i.fa.fa-fw.fa-power-off.text-danger
+                Logout

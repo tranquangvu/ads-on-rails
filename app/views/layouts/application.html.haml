@@ -27,7 +27,9 @@
                 = link_to "Register", new_user_registration_path
     .container
       - flash.each do |name, msg|
-        = content_tag :div, msg, class: [:alert, get_alert_class_by_name(name)]
+        = content_tag :div, class: [:alert, :message, get_alert_class_by_name(name)] do
+          %a.close{"aria-label" => "close", "data-dismiss" => "alert"} &times;
+          = msg
     = yield
     %footer
       %p copyright &copy; 2016

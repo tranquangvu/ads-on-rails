@@ -1,4 +1,6 @@
-%h1 Campaigns list
+%h1.text-primary.text-xxxl.text-light
+  Campaigns list
+  
 - if @campaigns.nil? or @campaigns.empty?
   %ul
     %li No campaigns available.
@@ -31,6 +33,4 @@
           = campaign.budget
         %td
           = campaign.advertising_channel_type
-#local-footer
-  %span.small-print= link_to("Back to home", ads_google_dashboard_index_path)
   
