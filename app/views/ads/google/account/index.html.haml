@@ -5,15 +5,57 @@
       No accounts available.
   - else
     - @accounts.each_pair do |id, account|
-      %li
-        = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.customer_id.to_s }
-        (#{account.company_name} )
-        - unless account.child_accounts.empty?
-          %ul
+      %table
+        %tr
+          %th
+            Account
+          %th
+            Account Label
+          %th
+            Company Name
+          %th
+            Currency Code
+          %th
+            Date Time Zone
+          %th
+            Account Type
+        %tr
+          %td
+            = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.name }
+            %br
+            = account.customer_id.to_s
+          %td
+            = account.account_labels
+          %td
+            = account.company_name
+          %td
+            = account.currency_code
+          %td
+            = account.date_time_zone
+          %td
+            = (account.can_manage_clients)? 'Manage Account' : 'Client Account'
+        %tr
+          - unless account.child_accounts.empty?
             - sorted_accounts = account.child_accounts.sort {|a, b| a.customer_id <=> b.customer_id}
             - sorted_accounts.each do |account|
-              %li
-                = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.customer_id.to_s }
-                (#{account.company_name} )
-#local-footer
+              %tr
+                %td
+                  = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.name }
+                  %br
+                  = account.customer_id.to_s
+                %td
+                  - if account.account_labels.nil?
+                    = ''
+                  - else
+                    - account.account_labels.each do |account_label|
+                      = account_label[:name]
+                      %br
+                %td
+                  = account.company_name
+                %td
+                  = account.currency_code
+                %td
+                  = account.date_time_zone
+                %td
+                  = (account.can_manage_clients)? 'Manage Account' : 'Client Account'
   %span.small-print= link_to('Back to home', ads_google_dashboard_index_path)
