@@ -6,13 +6,9 @@
     = javascript_include_tag 'adsmanager', 'data-turbolinks-track': true
     = favicon_link_tag 'favicon.png'
     = csrf_meta_tags
-  %body.menubar-hoverable.header-fixed
-    / header
+  %body.menubar-hoverable.header-fixed.menubar-pin
     = render 'partials/ads_header'
-
-    / main content
     #base
-      / right-content
       #content
         %section
           .section-body
@@ -21,7 +17,5 @@
                 %a.close{"aria-label" => "close", "data-dismiss" => "alert"} &times;
                 = msg
             = yield
-
-      / left-menu-bar
       #menubar.menubar-inverse.animate
         = render 'partials/ads_menu'

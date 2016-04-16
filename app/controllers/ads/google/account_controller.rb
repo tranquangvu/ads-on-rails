@@ -8,7 +8,7 @@ class Ads::Google::AccountController < Ads::Google::MasterController
   def select()
     self.selected_account = params[:account_id]
     flash[:notice] = "Selected account: %s" % selected_account
-    redirect_to ads_google_dashboard_index_path
+    redirect_to ads_google_account_index_path
   end
 
   private

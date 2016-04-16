@@ -4,7 +4,7 @@
       %ul.header-nav.header-nav-options
         %li.header-nav-brand
           .brand-holder
-            = link_to ads_root_path do
+            = link_to ads_root_path, { "data-no-turbolink" => "true" } do
               %span.text-lg.text-bold.text-primary BSTAGE ADS MANAGER
         %li
           %a.btn.btn-icon-toggle.menubar-toggle{"data-toggle" => "menubar"}

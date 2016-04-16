@@ -4,9 +4,18 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap-cover";
+@import "nprogress";
+@import "nprogress-bootstrap";
 @import "font-awesome";
 @import "materialadmin";
 @import "material-design-iconic-font.min";
 @import "libs/rickshaw/rickshaw";
 @import "libs/morris/morris.core";
+@import "libs/DataTables/jquery.dataTables";
+@import "libs/DataTables/extensions/dataTables.colVis";
+@import "libs/DataTables/extensions/dataTables.tableTools";
 @import "app_fonts";
+
+body{
+  background: #fff;
+}

@@ -11,8 +11,8 @@
       .menubar-head-panel
         / 
       %ul#main-menu.gui-controls
-        %li.active.expanding.expanded
-          = link_to ads_root_path, class: 'active' do
+        %li{class: request.original_fullpath ==  ads_root_path ? 'active expanded' : ''}
+          = link_to ads_root_path, class: (request.original_fullpath ==  ads_root_path ? 'active' : '') do
             .gui-icon
               %i.md.md-home
             %span.title Dashboard
@@ -28,27 +28,32 @@
             %li
               = link_to '#' do
                 %span.title Facebook
-        %li.gui-folder
+        %li.gui-folder{class: request.original_fullpath.match('/ads/google/') ? 'active expanded' : ''}
           %a
             .gui-icon
               %i.fa.fa-google.fa-fw
             %span.title Google Adwords
           %ul
-            %li
-              = link_to ads_google_account_index_path do
+            %li{class: request.original_fullpath == ads_google_account_index_path ? 'active expanded' : ''}
+              = link_to ads_google_account_index_path, class: (request.original_fullpath == ads_google_account_index_path ? 'active' : '') do
                 %span.title Accounts
-            %li
-              = link_to ads_google_account_input_path do
+
+            %li{class: request.original_fullpath == ads_google_account_input_path ? 'active expanded' : ''}
+              = link_to ads_google_account_input_path, class: (request.original_fullpath == ads_google_account_input_path ? 'active' : '') do
                 %span.title Enter Test Account ID
-            %li
-              = link_to ads_google_campaigns_path do
+
+            %li{class: request.original_fullpath == ads_google_campaigns_path ? 'active expanded' : ''}
+              = link_to ads_google_campaigns_path, class: (request.original_fullpath == ads_google_campaigns_path ? 'active' : '') do
                 %span.title Campaigns
-            %li
-              = link_to ads_google_report_index_path do
+
+            %li{class: request.original_fullpath == ads_google_report_index_path ? 'active expanded' : ''}
+              = link_to ads_google_report_index_path, class: (request.original_fullpath == ads_google_report_index_path ? 'active' : '') do
                 %span.title Report Center
+
             %li
               = link_to ads_google_login_logout_path do
                 %span.title Log Out
+
         %li.gui-folder
           %a
             .gui-icon

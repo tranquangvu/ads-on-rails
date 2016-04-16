@@ -6,6 +6,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require turbolinks
+//= require nprogress
+//= require nprogress-turbolinks
 //= require bootstrap-sprockets
 //= require libs/spin.js/spin.min
 //= retuire libs/autosize/jquery.autosize.min
@@ -30,8 +33,28 @@
 //= require core/source/AppNavSearch
 //= require core/source/AppVendor
 //= require core/demo/Demo
+//= require libs/DataTables/jquery.dataTables.min
+//= require libs/DataTables/extensions/ColVis/js/dataTables.colVis.min
+//= require libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min
 
-$(function(){
-  window.setTimeout(function() { $(".message").alert('close'); }, 5000);
+// init progress bar
+NProgress.configure({
+  showSpinner: false,
+  ease: 'ease',
+  speed: 500
 });
 
+$(document).on("page:change", function(){
+  NProgress.set(0.4);
+});
+
+$(function(){
+  // set timeout for alert close
+  window.setTimeout(function() { $(".message").alert('close'); }, 5000);
+
+  // done progress bar when page loaded
+  NProgress.done();
+  $("a[href*='/']").click(function(event) {
+    NProgress.start();
+  });
+});

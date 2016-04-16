@@ -103,13 +103,7 @@
       .card-body.height-4.no-padding
         .stick-bottom-left-right
           #rickshawGraph.height-4{"data-color1" => "#0aa89e", "data-color2" => "rgba(79, 89, 89, 0.2)"}
-      / end .card-body
-    / end .card
-  / end .col
-  / END SERVER STATUS
-/ end .row
 .row
-  / BEGIN TODOS
   .col-md-3
     .card
       .card-head
@@ -117,7 +111,6 @@
         .tools
           %a.btn.btn-icon-toggle.btn-close
             %i.md.md-close
-      / end .card-head
       .card-body.no-padding.height-9.scroll
         %ul.list{"data-sortable" => "true"}
           %li.tile
@@ -166,11 +159,6 @@
                   %span Forward important tasks
             %a.btn.btn-flat.ink-reaction.btn-default
               %i.md.md-delete
-      / end .card-body
-    / end .card
-  / end .col
-  / END TODOS
-  / BEGIN REGISTRATION HISTORY
   .col-md-6
     .card
       .card-head
@@ -182,7 +170,6 @@
             %i.fa.fa-angle-down
           %a.btn.btn-icon-toggle.btn-close
             %i.md.md-close
-      / end .card-head
       .card-body.no-padding.height-9
         .row
           .col-sm-6.hidden-xs
@@ -190,30 +177,21 @@
               %p
                 %i.md.md-mode-comment.text-primary-light
                 The registrations are measured from the time that the redesign was fully implemented and after the first e-mailing.
-          / end .col
           .col-sm-6
             .force-padding.pull-right.text-default-light
               %h2.no-margin.text-primary-dark
                 %span.text-xxl 66.05%
               %i.fa.fa-caret-up.text-success.fa-fw
               more registrations
-          / end .col
-        / end .row
         .stick-bottom-left-right.force-padding
           #flot-registrations.flot.height-5{"data-color" => "#0aa89e", "data-title" => "Registration history"}
-      / end .card-body
-    / end .card
-  / end .col
-  / END REGISTRATION HISTORY
-  / BEGIN NEW REGISTRATIONS
   .col-md-3
     .card
       .card-head
-        %header New registrations
+        %header New Users
         .tools.hidden-md
           %a.btn.btn-icon-toggle.btn-close
             %i.md.md-close
-      / end .card-head
       .card-body.no-padding.height-9.scroll
         %ul.list.divider-full-bleed
           %li.tile
@@ -258,11 +236,14 @@
               .tile-text Jessica Cruise
             %a.btn.btn-flat.ink-reaction
               %i.md.md-block.text-default-light
+:css
+  body{
+    background: #e5e6e6;
+  }              
 
 :javascript
   (function (namespace, $) {
     "use strict";
-
     var DemoDashboard = function () {
       // Create reference to this instance
       var o = this;
@@ -270,23 +251,18 @@
       $(document).ready(function () {
         o.initialize();
       });
-
     };
     var p = DemoDashboard.prototype;
-
     // =========================================================================
     // MEMBERS
     // =========================================================================
-
     p.rickshawSeries = [[], []];
     p.rickshawGraph = null;
     p.rickshawRandomData = null;
     p.rickshawTimer = null;
-
     // =========================================================================
     // INIT
     // =========================================================================
-
     p.initialize = function () {
       this._initSparklines();
       this._initFlotVisitors();
@@ -294,15 +270,12 @@
       this._initKnob();
       this._initFlotRegistration();
     };
-
     // =========================================================================
     // Sparklines
     // =========================================================================
-
     p._initSparklines = function () {
       // Generate random sparkline data
       var points = [20, 10, 25, 15, 30, 20, 30, 10, 15, 10, 20, 25, 25, 15, 20, 25, 10, 67, 10, 20, 25, 15, 25, 97, 10, 30, 10, 38, 20, 15, 82, 44, 20, 25, 20, 10, 20, 38];
-
       materialadmin.App.callOnResize(function () {
         var options = $('.sparkline-revenue').data();
         options.type = 'line';
@@ -311,12 +284,10 @@
         options.fillColor = false;
         $('.sparkline-revenue').sparkline(points, options);
       });
-
       materialadmin.App.callOnResize(function () {
         var parent = $('.sparkline-visits').closest('.card-body');
         var barWidth = 6;
         var spacing = (parent.width() - (points.length * barWidth)) / points.length;
-
         var options = $('.sparkline-visits').data();
         options.type = 'bar';
         options.barWidth = barWidth;
@@ -330,7 +301,6 @@
     // =========================================================================
     // FLOT
     // =========================================================================
-
     p._initFlotVisitors = function () {
       var o = this;
       var chart = $("#flot-visitors");
@@ -407,19 +377,16 @@
       
       // Create chart
       var plot = $.plot(chart, data, options);
-
       // Hover function
       var tip, previousPoint = null;
       chart.bind("plothover", function (event, pos, item) {
         if (item) {
           if (previousPoint !== item.dataIndex) {
             previousPoint = item.dataIndex;
-
             var x = item.datapoint[0];
             var y = item.datapoint[1];
             var tipLabel = '<strong>' + $(this).data('title') + '</strong>';
             var tipContent = Math.round(y) + " " + item.series.label.toLowerCase() + " on " + moment(x).format('dddd');
-
             if (tip !== undefined) {
               $(tip).popover('destroy');
             }
@@ -435,19 +402,15 @@
         }
       });
     };
-
     // =========================================================================
     // Rickshaw
     // =========================================================================
-
     p._initRickshaw = function () {
       // Don't init a rickshaw graph twice
       if (this.rickshawGraph !== null) {
         return;
       }
-
       var o = this;
-
       // Create random data
       this.rickshawRandomData = new Rickshaw.Fixtures.RandomData(50);
       for (var i = 0; i < 75; i++) {
@@ -456,7 +419,6 @@
       
       // Update knob charts
       this._updateKnob();
-
       // Init Richshaw graph
       this.rickshawGraph = new Rickshaw.Graph({
         element: $('#rickshawGraph').get(0),
@@ -476,21 +438,17 @@
           }
         ]
       });
-
       // Add hover info
       var hoverDetail = new Rickshaw.Graph.HoverDetail({
         graph: this.rickshawGraph
       });
-
       // Render graph
       this.rickshawGraph.render();
-
       // Add animated data
       clearInterval(this.rickshawTimer);
       this.rickshawTimer = setInterval(function () {
         o._refreshRickshaw();
       }, 2000);
-
       materialadmin.App.callOnResize(function () {
         o.rickshawGraph.configure({
           height: $('#rickshawGraph').height(),
@@ -499,33 +457,27 @@
         o.rickshawGraph.render();
       });
     };
-
     p._refreshRickshaw = function () {
       this.rickshawRandomData.removeData(this.rickshawSeries);
       this.rickshawRandomData.addData(this.rickshawSeries);
       this.rickshawGraph.update();
       this._updateKnob();
     };
-
     // =========================================================================
     // KNOB
     // =========================================================================
-
     p._initKnob = function () {
       if (!$.isFunction($.fn.knob)) {
         return;
       }
-
       $('.dial').each(function () {
         var options = materialadmin.App.getKnobStyle($(this));
         $(this).knob(options);
       });
     };
-
     p._updateKnob = function () {
       var val1 = this.rickshawSeries[0][this.rickshawSeries[0].length - 2];
       var val2 = this.rickshawSeries[0][this.rickshawSeries[0].length - 1];
-
       $({animatedVal: val1.y}).animate({animatedVal: val2.y}, {
         duration: 1200,
         easing: "swing",
@@ -538,7 +490,6 @@
     // =========================================================================
     // FLOT
     // =========================================================================
-
     p._initFlotRegistration = function () {
       var o = this;
       var chart = $("#flot-registrations");
@@ -569,7 +520,6 @@
           last: true
         }
       ];
-
       // Chart options
       var labelColor = chart.css('color');
       var options = {
@@ -608,19 +558,16 @@
       
       // Create chart
       var plot = $.plot(chart, data, options);
-
       // Hover function
       var tip, previousPoint = null;
       chart.bind("plothover", function (event, pos, item) {
         if (item) {
           if (previousPoint !== item.dataIndex) {
             previousPoint = item.dataIndex;
-
             var x = item.datapoint[0];
             var y = item.datapoint[1];
             var tipLabel = '<strong>' + $(this).data('title') + '</strong>';
             var tipContent = y + " " + item.series.label.toLowerCase() + " on " + moment(x).format('dddd');
-
             if (tip !== undefined) {
               $(tip).popover('destroy');
             }
@@ -636,7 +583,7 @@
         }
       });
     };
-
     // =========================================================================
     namespace.DemoDashboard = new DemoDashboard;
   }(this.materialadmin, jQuery)); // pass in (namespace, jQuery):
+  
