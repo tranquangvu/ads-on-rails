@@ -6,9 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require nprogress
-//= require nprogress-turbolinks
 //= require bootstrap-sprockets
 //= require libs/spin.js/spin.min
 //= retuire libs/autosize/jquery.autosize.min
@@ -44,17 +42,15 @@ NProgress.configure({
   speed: 500
 });
 
-$(document).on("page:change", function(){
-  NProgress.set(0.4);
-});
+window.onbeforeunload = function(e) {
+  NProgress.start();  
+};
 
 $(function(){
   // set timeout for alert close
   window.setTimeout(function() { $(".message").alert('close'); }, 5000);
 
   // done progress bar when page loaded
+  NProgress.set(0.2);
   NProgress.done();
-  $("a[href*='/']").click(function(event) {
-    NProgress.start();
-  });
 });
