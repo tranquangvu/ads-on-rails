@@ -4,7 +4,8 @@ AdwordsOnRails::Application.routes.draw do
   
   namespace :ads do
     namespace :google do
-      get "campaign/index"
+      get "campaigns", to: "campaign#index"
+      get "campaign/:owner_id/:id", to: "campaign#show", as: 'campaign'
 
       get "account/index"
       get "account/input"
@@ -16,9 +17,8 @@ AdwordsOnRails::Application.routes.draw do
 
       get "report/index"
       post "report/get"
-
-      get "dashboard/index"
-      root "dashboard#index"
+      
+      root "account#index"
     end
 
     get "global_dashboard/index"

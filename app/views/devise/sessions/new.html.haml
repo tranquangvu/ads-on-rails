@@ -1,11 +1,12 @@
 .form-group.devise-form
-  %h1 Log in
+  %h1 Sign in
   = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     .form-inputs
       = f.input :email, required: false, input_html: {class: 'form-control'}, label: false, placeholder: 'Email'
       = f.input :password, required: false, input_html: {class: 'form-control'}, label: false, placeholder: 'Password'
-      = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+      .checkbox.checkbox-inline.checkbox-styled
+        = f.input :remember_me,as: :boolean if devise_mapping.rememberable?
     .form-actions
-      = f.button :submit, "Log in", class: 'btn btn-main'
+      = f.button :submit, "Sign in", class: 'btn btn-raised btn-primary btn-main'
   .shared-links
     = render "devise/shared/links"

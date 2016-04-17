@@ -1,32 +1,75 @@
-%h1 Campaigns list
+%h1.text-primary.text-xxxl.text-light
+  Campaigns list
+  
 - if @campaigns.nil? or @campaigns.empty?
   %ul
     %li No campaigns available.
 - else
-  %table
-    %tr
-      %th
-        ID
-      %th
-        Name
-      %th
-        User Account
-      %th
-        Status
-      %th
-        Budget
-    - @campaigns.each do |id, campaign|
-      %tr
-        %td
-          = campaign.id
-        %td
-          = campaign.name
-        %td
-          = campaign.owner
-        %td
-          = campaign.status
-        %td
-          = campaign.budget
-#local-footer
-  %span.small-print= link_to("Back to home", ads_google_dashboard_index_path)
-  
+  .table-responsive
+    %table#campains-table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th
+            ID
+          %th
+            Name
+          %th
+            User Account
+          %th
+            Status
+          %th
+            Budget
+          %th
+            Advertising Type
+      %tfoot
+        %tr
+          %th
+            ID
+          %th
+            Name
+          %th
+            User Account
+          %th
+            Status
+          %th
+            Budget
+          %th
+            Advertising Type
+      %tbody
+        - @campaigns.each do |id, campaign|
+          %tr
+            %td
+              = link_to campaign.id, ads_google_campaign_path(campaign.owner[:id], campaign.id)
+            %td
+              = link_to campaign.name, ads_google_campaign_path(campaign.owner[:id], campaign.id)
+            %td
+              = campaign.owner[:name]
+            %td
+              = campaign.status
+            %td
+              = campaign.budget[:amount][:micro_amount]
+            %td
+              = campaign.advertising_channel_type
+
+:javascript
+  $('#campains-table').DataTable({
+    "dom": 'lCfrtip',
+    "order": [],
+    "colVis": {
+      "buttonText": "Columns",
+      "overlayFade": 0,
+      "align": "right"
+    },
+    "language": {
+      "lengthMenu": '_MENU_ entries per page',
+      "search": '<i class="fa fa-search"></i>',
+      "paginate": {
+        "previous": '<i class="fa fa-angle-left"></i>',
+        "next": '<i class="fa fa-angle-right"></i>'
+      }
+    }
+  });
+
+  $('#campains-table tbody').on('click', 'tr', function() {
+    $(this).toggleClass('selected');
+  });

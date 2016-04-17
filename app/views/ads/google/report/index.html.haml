@@ -1,4 +1,6 @@
-%h1 Retrieve a report
+%h1.text-primary.text-xxxl.text-light
+  Retrieve a report
+  
 - if @selected_account.nil?
   .notice No account selected!
 - else
@@ -13,7 +15,7 @@
         %li No reports available.
     - else
       .report-form
-        = form_tag('/report/get', :method => 'post') do
+        = form_tag(ads_google_report_get_path, :method => 'post') do
           .report-form-item
             Report:
             %select{:name => "type"}
@@ -34,5 +36,4 @@
               Include zero impressions
           .report-form-item
             %input{:type => "submit", :value => "Get report"}
-#local-footer
-  %span.small-print= link_to("Back to home", ads_google_dashboard_index_path)
+            

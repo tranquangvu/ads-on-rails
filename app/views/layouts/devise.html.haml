@@ -4,8 +4,10 @@
     %title Ads On Rails | Authentication
     = stylesheet_link_tag    'devise', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'devise', 'data-turbolinks-track' => true
+    = favicon_link_tag 'favicon.png'
     = csrf_meta_tags
   %body
+    %header.devide-header
     - flash.each do |name, msg|
       = content_tag :div, msg, class: "alert alert-info fade in"
     = yield

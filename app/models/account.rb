@@ -1,5 +1,5 @@
 class Account
-  attr_reader :customer_id, :company_name, :name, :child_accounts, :currency_code, :date_time_zone, :account_labels, :can_manage_clients
+  attr_reader :customer_id, :company_name, :name, :child_accounts, :currency_code, :date_time_zone, :account_labels
   attr_accessor :parent
 
   def initialize(api_account)
@@ -9,7 +9,6 @@ class Account
     @currency_code = api_account[:currency_code]
     @date_time_zone = api_account[:date_time_zone]
     @account_labels = api_account[:account_labels]
-    @can_manage_clients = api_account[:can_manage_clients]
     @child_accounts = []
   end
 
@@ -41,4 +40,22 @@ class Account
   def add_child(child)
     @child_accounts << child
   end
+
+  # get all clients account from root
+  def self.get_client_accounts(root)
+    if root.is_a? Hash
+      return get_client_accounts(root.first[1].child_accounts)
+    else
+      result = []
+      root.each do |account|
+        if account.child_accounts.empty?
+          result << account
+        else
+          result << get_client_accounts(account)
+        end
+      end
+      return result
+    end
+  end
+  
 end

@@ -8,7 +8,7 @@ class Ads::Google::AccountController < Ads::Google::MasterController
   def select()
     self.selected_account = params[:account_id]
     flash[:notice] = "Selected account: %s" % selected_account
-    redirect_to ads_google_dashboard_index_path
+    redirect_to ads_google_account_index_path
   end
 
   private
@@ -26,7 +26,7 @@ class Ads::Google::AccountController < Ads::Google::MasterController
       # Then find all child accounts using that ID.
       managed_customer_srv = adwords.service(
           :ManagedCustomerService, get_api_version())
-      selector = {:fields => ['CustomerId', 'Name', 'CompanyName', 'CurrencyCode', 'DateTimeZone', 'AccountLabels', 'CanManageClients']}
+      selector = {:fields => ['CustomerId', 'Name', 'CompanyName', 'CurrencyCode', 'DateTimeZone', 'AccountLabels']}
       result = nil
       begin
         result = managed_customer_srv.get(selector)

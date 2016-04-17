@@ -1,5 +1,6 @@
 class AfterSignupController < ApplicationController
   layout 'devise'
+  
   include Wicked::Wizard
   steps :ads_profile_creation
 

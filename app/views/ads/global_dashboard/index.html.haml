@@ -1,3 +1,589 @@
-%h1 This is global dashboard page
+.row
+  .col-md-3.col-sm-6
+    .card
+      .card-body.no-padding
+        .alert.alert-callout.alert-info.no-margin
+          %strong.pull-right.text-success.text-lg
+            0,38%
+            %i.md.md-trending-up
+          %strong.text-xl $ 32,829
+          %br/
+          %span.opacity-50 Revenue
+          .stick-bottom-left-right
+            .height-2.sparkline-revenue{"data-line-color" => "#bdc1c1"}
+  .col-md-3.col-sm-6
+    .card
+      .card-body.no-padding
+        .alert.alert-callout.alert-warning.no-margin
+          %strong.pull-right.text-warning.text-lg
+            0,01%
+            %i.md.md-swap-vert
+          %strong.text-xl 432,901
+          %br/
+          %span.opacity-50 Visits
+          .stick-bottom-right
+            .height-1.sparkline-visits{"data-bar-color" => "#e5e6e6"}
+  .col-md-3.col-sm-6
+    .card
+      .card-body.no-padding
+        .alert.alert-callout.alert-danger.no-margin
+          %strong.pull-right.text-danger.text-lg
+            0,18%
+            %i.md.md-trending-down
+          %strong.text-xl 42.90%
+          %br/
+          %span.opacity-50 Bounce rate
+          .stick-bottom-left-right
+            .progress.progress-hairline.no-margin
+              .progress-bar.progress-bar-danger{:style => "width:43%"}
+  .col-md-3.col-sm-6
+    .card
+      .card-body.no-padding
+        .alert.alert-callout.alert-success.no-margin
+          %h1.pull-right.text-success
+            %i.md.md-timer
+          %strong.text-xl 54 sec.
+          %br/
+          %span.opacity-50 Avg. time on site
+.row
+  .col-md-9
+    .card
+      .row
+        .col-md-8
+          .card-head
+            %header Site activity
+          .card-body.height-8
+            #flot-visitors-legend.flot-legend-horizontal.stick-top-right.no-y-padding
+            #flot-visitors.flot.height-7{"data-color" => "#7dd8d2,#0aa89e", "data-title" => "Activity entry"}
+        .col-md-4
+          .card-head
+            %header Today's stats
+          .card-body.height-8
+            %strong 214
+            members
+            %span.pull-right.text-success.text-sm
+              0,18%
+              %i.md.md-trending-up
+            .progress.progress-hairline
+              .progress-bar.progress-bar-primary-dark{:style => "width:43%"}
+            756 pageviews
+            %span.pull-right.text-success.text-sm
+              0,68%
+              %i.md.md-trending-up
+            .progress.progress-hairline
+              .progress-bar.progress-bar-primary-dark{:style => "width:11%"}
+            291 bounce rates
+            %span.pull-right.text-danger.text-sm
+              21,08%
+              %i.md.md-trending-down
+            .progress.progress-hairline
+              .progress-bar.progress-bar-danger{:style => "width:93%"}
+            32,301 visits
+            %span.pull-right.text-success.text-sm
+              0,18%
+              %i.md.md-trending-up
+            .progress.progress-hairline
+              .progress-bar.progress-bar-primary-dark{:style => "width:63%"}
+            132 pages
+            %span.pull-right.text-success.text-sm
+              0,18%
+              %i.md.md-trending-up
+            .progress.progress-hairline
+              .progress-bar.progress-bar-primary-dark{:style => "width:47%"}
+  .col-md-3
+    .card
+      .card-head
+        %header.text-primary Server status
+      .card-body.height-4
+        .pull-right.text-center
+          %em.text-primary Temperature
+          %br/
+          #serverStatusKnob.knob.knob-shadow.knob-primary.knob-body-track.size-2
+            %input.dial{"data-max" => "100", "data-min" => "0", "data-readOnly" => "true", "data-thickness" => ".09", :type => "text", :value => "50"}
+      .card-body.height-4.no-padding
+        .stick-bottom-left-right
+          #rickshawGraph.height-4{"data-color1" => "#0aa89e", "data-color2" => "rgba(79, 89, 89, 0.2)"}
+.row
+  .col-md-3
+    .card
+      .card-head
+        %header Todo's
+        .tools
+          %a.btn.btn-icon-toggle.btn-close
+            %i.md.md-close
+      .card-body.no-padding.height-9.scroll
+        %ul.list{"data-sortable" => "true"}
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:checked => "", :type => "checkbox"}
+                  %span Call clients for follow-up
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:type => "checkbox"}
+                  %span
+                    Schedule meeting
+                    %small opportunity for new customers
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:type => "checkbox"}
+                  %span
+                    Upload files to server
+                    %small The files must be shared with all members of the board
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:type => "checkbox"}
+                  %span Forward important tasks
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:type => "checkbox"}
+                  %span Forward important tasks
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+          %li.tile
+            .checkbox.checkbox-styled.tile-text
+              %label
+                %input{:type => "checkbox"}
+                  %span Forward important tasks
+            %a.btn.btn-flat.ink-reaction.btn-default
+              %i.md.md-delete
+  .col-md-6
+    .card
+      .card-head
+        %header Registration history
+        .tools
+          %a.btn.btn-icon-toggle.btn-refresh
+            %i.md.md-refresh
+          %a.btn.btn-icon-toggle.btn-collapse
+            %i.fa.fa-angle-down
+          %a.btn.btn-icon-toggle.btn-close
+            %i.md.md-close
+      .card-body.no-padding.height-9
+        .row
+          .col-sm-6.hidden-xs
+            .force-padding.text-sm.text-default-light
+              %p
+                %i.md.md-mode-comment.text-primary-light
+                The registrations are measured from the time that the redesign was fully implemented and after the first e-mailing.
+          .col-sm-6
+            .force-padding.pull-right.text-default-light
+              %h2.no-margin.text-primary-dark
+                %span.text-xxl 66.05%
+              %i.fa.fa-caret-up.text-success.fa-fw
+              more registrations
+        .stick-bottom-left-right.force-padding
+          #flot-registrations.flot.height-5{"data-color" => "#0aa89e", "data-title" => "Registration history"}
+  .col-md-3
+    .card
+      .card-head
+        %header New Users
+        .tools.hidden-md
+          %a.btn.btn-icon-toggle.btn-close
+            %i.md.md-close
+      .card-body.no-padding.height-9.scroll
+        %ul.list.divider-full-bleed
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Ann Laurens
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Alex Nelson
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Mary Peterson
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Philip Ericsson
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Jim Peters
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+          %li.tile
+            .tile-content
+              .tile-icon
+                = image_tag('avatar1.jpg', alt: '')
+              .tile-text Jessica Cruise
+            %a.btn.btn-flat.ink-reaction
+              %i.md.md-block.text-default-light
+:css
+  body{
+    background: #e5e6e6;
+  }              
 
-= link_to "Google ads dashboard", ads_google_dashboard_index_path
+:javascript
+  (function (namespace, $) {
+    "use strict";
+    var DemoDashboard = function () {
+      // Create reference to this instance
+      var o = this;
+      // Initialize app when document is ready
+      $(document).ready(function () {
+        o.initialize();
+      });
+    };
+    var p = DemoDashboard.prototype;
+    // =========================================================================
+    // MEMBERS
+    // =========================================================================
+    p.rickshawSeries = [[], []];
+    p.rickshawGraph = null;
+    p.rickshawRandomData = null;
+    p.rickshawTimer = null;
+    // =========================================================================
+    // INIT
+    // =========================================================================
+    p.initialize = function () {
+      this._initSparklines();
+      this._initFlotVisitors();
+      this._initRickshaw();
+      this._initKnob();
+      this._initFlotRegistration();
+    };
+    // =========================================================================
+    // Sparklines
+    // =========================================================================
+    p._initSparklines = function () {
+      // Generate random sparkline data
+      var points = [20, 10, 25, 15, 30, 20, 30, 10, 15, 10, 20, 25, 25, 15, 20, 25, 10, 67, 10, 20, 25, 15, 25, 97, 10, 30, 10, 38, 20, 15, 82, 44, 20, 25, 20, 10, 20, 38];
+      materialadmin.App.callOnResize(function () {
+        var options = $('.sparkline-revenue').data();
+        options.type = 'line';
+        options.width = '100%';
+        options.height = $('.sparkline-revenue').height() + 'px';
+        options.fillColor = false;
+        $('.sparkline-revenue').sparkline(points, options);
+      });
+      materialadmin.App.callOnResize(function () {
+        var parent = $('.sparkline-visits').closest('.card-body');
+        var barWidth = 6;
+        var spacing = (parent.width() - (points.length * barWidth)) / points.length;
+        var options = $('.sparkline-visits').data();
+        options.type = 'bar';
+        options.barWidth = barWidth;
+        options.barSpacing = spacing;
+        options.height = $('.sparkline-visits').height() + 'px';
+        options.fillColor = false;
+        $('.sparkline-visits').sparkline(points, options);
+      });
+    };
+    
+    // =========================================================================
+    // FLOT
+    // =========================================================================
+    p._initFlotVisitors = function () {
+      var o = this;
+      var chart = $("#flot-visitors");
+      
+      // Elements check
+      if (!$.isFunction($.fn.plot) || chart.length === 0) {
+        return;
+      }
+      
+      // Chart data
+      var data = [
+        {
+          label: 'Pageviews',
+          data: [
+            [moment().subtract(168, 'hours').valueOf(), 50],
+            [moment().subtract(144, 'hours').valueOf(), 620],
+            [moment().subtract(108, 'hours').valueOf(), 380],
+            [moment().subtract(70, 'hours').valueOf(), 880],
+            [moment().subtract(30, 'hours').valueOf(), 450],
+            [moment().subtract(12, 'hours').valueOf(), 600],
+            [moment().valueOf(), 20]
+          ],
+          last: true
+        },
+        {
+          label: 'Visitors',
+          data: [
+            [moment().subtract(168, 'hours').valueOf(), 50],
+            [moment().subtract(155, 'hours').valueOf(), 520],
+            [moment().subtract(132, 'hours').valueOf(), 200],
+            [moment().subtract(36, 'hours').valueOf(), 800],
+            [moment().subtract(12, 'hours').valueOf(), 150],
+            [moment().valueOf(), 20]
+          ],
+          last: true
+        }
+      ];
+      
+      // Chart options
+      var labelColor = chart.css('color');
+      var options = {
+        colors: chart.data('color').split(','),
+        series: {
+          shadowSize: 0,
+          lines: {
+            show: true,
+            lineWidth: false,
+            fill: true
+          },
+          curvedLines: {
+            apply: true,
+            active: true,
+            monotonicFit: false
+           }
+        },
+        legend: {
+          container: $('#flot-visitors-legend')
+        },
+        xaxis: {
+          mode: "time",
+          timeformat: "%d %b",
+          font: {color: labelColor}
+        },
+        yaxis: {
+          font: {color: labelColor}
+        },
+        grid: {
+          borderWidth: 0,
+          color: labelColor,
+          hoverable: true
+        }
+      };
+      chart.width('100%');
+      
+      // Create chart
+      var plot = $.plot(chart, data, options);
+      // Hover function
+      var tip, previousPoint = null;
+      chart.bind("plothover", function (event, pos, item) {
+        if (item) {
+          if (previousPoint !== item.dataIndex) {
+            previousPoint = item.dataIndex;
+            var x = item.datapoint[0];
+            var y = item.datapoint[1];
+            var tipLabel = '<strong>' + $(this).data('title') + '</strong>';
+            var tipContent = Math.round(y) + " " + item.series.label.toLowerCase() + " on " + moment(x).format('dddd');
+            if (tip !== undefined) {
+              $(tip).popover('destroy');
+            }
+            tip = $('<div></div>').appendTo('body').css({left: item.pageX, top: item.pageY - 5, position: 'absolute'});
+            tip.popover({html: true, title: tipLabel, content: tipContent, placement: 'top'}).popover('show');
+          }
+        }
+        else {
+          if (tip !== undefined) {
+            $(tip).popover('destroy');
+          }
+          previousPoint = null;
+        }
+      });
+    };
+    // =========================================================================
+    // Rickshaw
+    // =========================================================================
+    p._initRickshaw = function () {
+      // Don't init a rickshaw graph twice
+      if (this.rickshawGraph !== null) {
+        return;
+      }
+      var o = this;
+      // Create random data
+      this.rickshawRandomData = new Rickshaw.Fixtures.RandomData(50);
+      for (var i = 0; i < 75; i++) {
+        this.rickshawRandomData.addData(this.rickshawSeries);
+      }
+      
+      // Update knob charts
+      this._updateKnob();
+      // Init Richshaw graph
+      this.rickshawGraph = new Rickshaw.Graph({
+        element: $('#rickshawGraph').get(0),
+        width: $('#rickshawGraph').closest('.card-body').width(),
+        height: $('#rickshawGraph').height(),
+        interpolation: 'linear',
+        renderer: 'area',
+        series: [
+          {
+            data: this.rickshawSeries[0],
+            color: $('#rickshawGraph').data('color1'),
+            name: 'temperature'
+          }, {
+            data: this.rickshawSeries[1],
+            color: $('#rickshawGraph').data('color2'),
+            name: 'heat index'
+          }
+        ]
+      });
+      // Add hover info
+      var hoverDetail = new Rickshaw.Graph.HoverDetail({
+        graph: this.rickshawGraph
+      });
+      // Render graph
+      this.rickshawGraph.render();
+      // Add animated data
+      clearInterval(this.rickshawTimer);
+      this.rickshawTimer = setInterval(function () {
+        o._refreshRickshaw();
+      }, 2000);
+      materialadmin.App.callOnResize(function () {
+        o.rickshawGraph.configure({
+          height: $('#rickshawGraph').height(),
+          width: $('#rickshawGraph').closest('.card-body').outerWidth()
+        });
+        o.rickshawGraph.render();
+      });
+    };
+    p._refreshRickshaw = function () {
+      this.rickshawRandomData.removeData(this.rickshawSeries);
+      this.rickshawRandomData.addData(this.rickshawSeries);
+      this.rickshawGraph.update();
+      this._updateKnob();
+    };
+    // =========================================================================
+    // KNOB
+    // =========================================================================
+    p._initKnob = function () {
+      if (!$.isFunction($.fn.knob)) {
+        return;
+      }
+      $('.dial').each(function () {
+        var options = materialadmin.App.getKnobStyle($(this));
+        $(this).knob(options);
+      });
+    };
+    p._updateKnob = function () {
+      var val1 = this.rickshawSeries[0][this.rickshawSeries[0].length - 2];
+      var val2 = this.rickshawSeries[0][this.rickshawSeries[0].length - 1];
+      $({animatedVal: val1.y}).animate({animatedVal: val2.y}, {
+        duration: 1200,
+        easing: "swing",
+        step: function () {
+          $('#serverStatusKnob input').val(Math.ceil(this.animatedVal)).trigger("change");
+        }
+      });
+    };
+    
+    // =========================================================================
+    // FLOT
+    // =========================================================================
+    p._initFlotRegistration = function () {
+      var o = this;
+      var chart = $("#flot-registrations");
+      
+      // Elements check
+      if (!$.isFunction($.fn.plot) || chart.length === 0) {
+        return;
+      }
+      
+      // Chart data
+      var data = [
+        {
+          label: 'Registrations',
+          data: [
+            [moment().subtract(11, 'month').valueOf(), 1100],
+            [moment().subtract(10, 'month').valueOf(), 2450],
+            [moment().subtract(9, 'month').valueOf(), 3800],
+            [moment().subtract(8, 'month').valueOf(), 2650],
+            [moment().subtract(7, 'month').valueOf(), 3905],
+            [moment().subtract(6, 'month').valueOf(), 5250],
+            [moment().subtract(5, 'month').valueOf(), 3600],
+            [moment().subtract(4, 'month').valueOf(), 4900],
+            [moment().subtract(3, 'month').valueOf(), 6200],
+            [moment().subtract(2, 'month').valueOf(), 5195],
+            [moment().subtract(1, 'month').valueOf(), 6500],
+            [moment().valueOf(), 7805]
+          ],
+          last: true
+        }
+      ];
+      // Chart options
+      var labelColor = chart.css('color');
+      var options = {
+        colors: chart.data('color').split(','),
+        series: {
+          shadowSize: 0,
+          lines: {
+            show: true,
+            lineWidth: 2
+          },
+          points: {
+            show: true,
+            radius: 3,
+            lineWidth: 2
+          }
+        },
+        legend: {
+          show: false
+        },
+        xaxis: {
+          mode: "time",
+          timeformat: "%b %y",
+          color: 'rgba(0, 0, 0, 0)',
+          font: {color: labelColor}
+        },
+        yaxis: {
+          font: {color: labelColor}
+        },
+        grid: {
+          borderWidth: 0,
+          color: labelColor,
+          hoverable: true
+        }
+      };
+      chart.width('100%');
+      
+      // Create chart
+      var plot = $.plot(chart, data, options);
+      // Hover function
+      var tip, previousPoint = null;
+      chart.bind("plothover", function (event, pos, item) {
+        if (item) {
+          if (previousPoint !== item.dataIndex) {
+            previousPoint = item.dataIndex;
+            var x = item.datapoint[0];
+            var y = item.datapoint[1];
+            var tipLabel = '<strong>' + $(this).data('title') + '</strong>';
+            var tipContent = y + " " + item.series.label.toLowerCase() + " on " + moment(x).format('dddd');
+            if (tip !== undefined) {
+              $(tip).popover('destroy');
+            }
+            tip = $('<div></div>').appendTo('body').css({left: item.pageX, top: item.pageY - 5, position: 'absolute'});
+            tip.popover({html: true, title: tipLabel, content: tipContent, placement: 'top'}).popover('show');
+          }
+        }
+        else {
+          if (tip !== undefined) {
+            $(tip).popover('destroy');
+          }
+          previousPoint = null;
+        }
+      });
+    };
+    // =========================================================================
+    namespace.DemoDashboard = new DemoDashboard;
+  }(this.materialadmin, jQuery)); // pass in (namespace, jQuery):
+  
