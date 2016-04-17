@@ -1,11 +1,14 @@
 class Account
-  attr_reader :customer_id, :company_name, :name, :child_accounts
+  attr_reader :customer_id, :company_name, :name, :child_accounts, :currency_code, :date_time_zone, :account_labels
   attr_accessor :parent
 
   def initialize(api_account)
     @customer_id = api_account[:customer_id]
     @company_name = api_account[:company_name]
     @name = api_account[:name]
+    @currency_code = api_account[:currency_code]
+    @date_time_zone = api_account[:date_time_zone]
+    @account_labels = api_account[:account_labels]
     @child_accounts = []
   end
 
@@ -16,6 +19,11 @@ class Account
         result[account[:customer_id]] = Account.new(account)
         result
       end
+
+      # if accounts[:account_labels].nil?
+      #   accounts[:account_labels] = []
+      # end
+
       if graph[:links]
         graph[:links].each do |link|
           parent_account = accounts[link[:manager_customer_id]]

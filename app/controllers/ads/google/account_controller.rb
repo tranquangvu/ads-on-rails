@@ -12,7 +12,7 @@ class Ads::Google::AccountController < Ads::Google::MasterController
   end
 
   private
-    
+
     def get_accounts_graph()
       adwords = get_adwords_api()
 
@@ -21,11 +21,12 @@ class Ads::Google::AccountController < Ads::Google::MasterController
       customer = customer_srv.get()
       adwords.credential_handler.set_credential(
           :client_customer_id, customer[:customer_id])
+      puts(adwords.credential_handler.set_credential(:client_customer_id, customer[:customer_id]))
 
       # Then find all child accounts using that ID.
       managed_customer_srv = adwords.service(
           :ManagedCustomerService, get_api_version())
-      selector = {:fields => ['CustomerId', 'Name']}
+      selector = {:fields => ['CustomerId', 'Name', 'CompanyName', 'CurrencyCode', 'DateTimeZone', 'AccountLabels']}
       result = nil
       begin
         result = managed_customer_srv.get(selector)
