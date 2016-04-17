@@ -1,8 +1,6 @@
-%h1 Authorization required
-- if flash[:alert]
-  .alert= flash[:alert]
-- if flash[:notice]
-  .notice= flash[:notice]
-%p Please authorize with a google account first:
-%p
-  %a{:href => @login_url} Proceed
+.google-auth.text-center
+  %h1.text-primary.text-xxxl.text-light
+    Authorization required
+  %p.lead
+    Please authorize with a google account first
+  = link_to 'Proceed now', @login_url.to_s, class: 'btn btn-raised ink-reaction btn-lg btn-primary'

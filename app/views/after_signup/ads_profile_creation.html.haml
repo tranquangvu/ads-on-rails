@@ -1,0 +1,16 @@
+.form-group.devise-form{style: "margin-top: 30px;"}
+  %h1 Create Ads profile
+  = simple_form_for @user, url: wizard_path, method: :put do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :company_name, required: true, input_html: {class: 'form-control'}, label: false, placeholder: 'Company Name'
+      = f.input :company_url, required: true, input_html: {class: 'form-control'}, label: false, placeholder: 'Company URL'
+      = f.input :advertiser_type_id, collection: User::ADVERTISER_TYPES.collect { |x| [x, User::ADVERTISER_TYPES.index(x)] }, prompt: 'Choose Advertiser Type', input_html: {class: 'form-control'}, label: false
+      = f.input :target_audience_id, collection: User::TARGET_AUDIENCE.collect { |x| [x, User::TARGET_AUDIENCE.index(x)] }, prompt: 'Choose Target Audience', input_html: {class: 'form-control'}, label: false
+      = f.input :monthly_spend_id, collection: User::AVERAGE_MONTHLY_SPEND.collect { |x| [x, User::AVERAGE_MONTHLY_SPEND.index(x)]}, prompt: 'Choose Average Monthly Speed', input_html: {class: 'form-control'}, label: false
+    .form-actions
+      .row
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          = link_to "skip this step", next_wizard_path, class: 'btn btn-raised btn-warning btn-main'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          = f.submit "FINISH", class: 'btn btn-raised btn-primary btn-main'

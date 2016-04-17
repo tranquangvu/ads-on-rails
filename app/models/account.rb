@@ -1,13 +1,11 @@
 class Account
-  attr_reader :customer_id
-  attr_reader :company_name
-
+  attr_reader :customer_id, :company_name, :name, :child_accounts
   attr_accessor :parent
-  attr_reader :child_accounts
 
   def initialize(api_account)
     @customer_id = api_account[:customer_id]
     @company_name = api_account[:company_name]
+    @name = api_account[:name]
     @child_accounts = []
   end
 
@@ -34,4 +32,22 @@ class Account
   def add_child(child)
     @child_accounts << child
   end
+
+  # get all clients account from root
+  def self.get_client_accounts(root)
+    if root.is_a? Hash
+      return get_client_accounts(root.first[1].child_accounts)
+    else
+      result = []
+      root.each do |account|
+        if account.child_accounts.empty?
+          result << account
+        else
+          result << get_client_accounts(account)
+        end
+      end
+      return result
+    end
+  end
+  
 end
