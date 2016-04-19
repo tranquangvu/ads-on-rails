@@ -6,8 +6,10 @@
       No accounts available.
   - else
     - @accounts.each_pair do |id, account|
-      / = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.name }
-      / = account.customer_id.to_s
+      = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) do
+        %h4.text-accent
+          %i.fa.fa-dot-circle-o.text-accent
+          Root Account: #{account.name} - #{account.customer_id.to_s}
       - unless account.child_accounts.empty?
         .table-responsive
           %table#account-table.table.table-striped.table-hover

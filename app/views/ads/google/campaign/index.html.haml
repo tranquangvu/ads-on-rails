@@ -1,55 +1,61 @@
 %h1.text-primary.text-xxxl.text-light
-  Campaigns list
-  
-- if @campaigns.nil? or @campaigns.empty?
-  %ul
-    %li No campaigns available.
+  All Campaigns
+- if @campaigns.nil? || @campaigns.empty?
+  %p No campaigns available.
 - else
   .table-responsive
     %table#campains-table.table.table-striped.table-hover
       %thead
         %tr
-          %th
-            ID
-          %th
-            Name
-          %th
-            User Account
-          %th
-            Status
-          %th
-            Budget
-          %th
-            Advertising Type
+          %th Id
+          %th Campaign
+          %th Client Account
+          %th Budget
+          %th Types
+          %th Status
+          %th Impr
+          %th Clicks
+          %th CTR
+          %th Avg. CPC
+          %th Cost
       %tfoot
         %tr
-          %th
-            ID
-          %th
-            Name
-          %th
-            User Account
-          %th
-            Status
-          %th
-            Budget
-          %th
-            Advertising Type
+          %th ID 
+          %th Campaign
+          %th Client Account
+          %th Budget
+          %th Types
+          %th Status
+          %th Impr
+          %th Clicks
+          %th CTR
+          %th Avg. CPC
+          %th Cost
       %tbody
-        - @campaigns.each do |id, campaign|
+        - @campaigns.each do |campaign|
           %tr
             %td
-              = link_to campaign.id, ads_google_campaign_path(campaign.owner[:id], campaign.id)
+              = link_to campaign.id, ads_google_campaign_path(campaign.customer_id, campaign.id)
             %td
-              = link_to campaign.name, ads_google_campaign_path(campaign.owner[:id], campaign.id)
+              = link_to campaign.name, ads_google_campaign_path(campaign.customer_id, campaign.id)
             %td
-              = campaign.owner[:name]
+              = campaign.customer_name
+            %td
+              = number_with_delimiter(campaign.amount).to_s + campaign. account_currency_code + '/' + campaign.period
+            %td
+              = campaign.advertising_channel_type
             %td
               = campaign.status
             %td
-              = campaign.budget[:amount][:micro_amount]
+              = campaign.impressions
             %td
-              = campaign.advertising_channel_type
+              = campaign.clicks
+            %td
+              = campaign.ctr
+            %td
+              = campaign.average_cpc
+            %td
+              = campaign.cost
 
 :javascript
   $('#campains-table').DataTable({
@@ -69,7 +75,4 @@
       }
     }
   });
-
-  $('#campains-table tbody').on('click', 'tr', function() {
-    $(this).toggleClass('selected');
-  });
+  
