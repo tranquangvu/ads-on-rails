@@ -1,113 +1,70 @@
 class Ads::Google::CampaignController < Ads::Google::MasterController
-  
-  PAGE_SIZE = 50
-  
   def index
-    @campaigns = selected_account ? get_campaigns_of_this_account : get_campaigns_of_accounts
+    @campaigns = selected_account ? campaigns_of_specify_account(selected_account) : campains_of_all_accounts
   end
 
   def show
-    response = request_campaign_by_id(params[:id].to_i, params[:owner_id].to_i)
-    @campaign = Campaign.get_campaigns_list(response).first[1] if response
+    # response = request_campaign_by_id(params[:id].to_i, params[:owner_id].to_i)
+    # @campaign = Campaign.get_campaigns_list(response).first[1] if response
   end
 
   private
-    # get campaigns by current selected account
-    def get_campaigns_of_this_account
-      campaigns = {}
-      response = request_campaigns_list
-      campaigns = Campaign.get_campaigns_list(response) if response
+
+  def client_accounts
+    graph = get_accounts_graph_with_fields(['CustomerId'])
+    graph[:links].map{ |link| link[:client_customer_id] }
+  end
+
+  def adwords
+    get_adwords_api
+  end
+
+  def get_client_customer_id
+    adwords.credential_handler.credentials[:client_customer_id]
+  end
+
+  def set_client_customer_id(customer_id)
+    adwords.credential_handler.set_credential(:client_customer_id, customer_id)
+  end
+
+  def create_report_definition(date_range_type: 'LAST_7_DAYS')
+    {
+      :selector => {
+        :fields => ['CampaignId', 'CampaignName', 'CampaignStatus', 'AccountCurrencyCode', 'Amount', 'Period', 'Impressions', 'Clicks', 'Ctr', 'AverageCpc', 'Cost', 'AdvertisingChannelType', 'ExternalCustomerId', 'CustomerDescriptiveName']
+      },
+      :report_name => 'CRITERIA_PERFORMANCE_REPORT',
+      :report_type => 'CAMPAIGN_PERFORMANCE_REPORT',
+      :download_format => 'XML',
+      :date_range_type => date_range_type
+    }
+  end
+
+  def get_stats_report(customer_id)
+    # get client customer id before excute
+    old_client_customer_id = get_client_customer_id
+
+    set_client_customer_id(customer_id)
+    report_utils = adwords.report_utils
+    report_definition = create_report_definition
+    result = report_utils.download_report(report_definition)
+
+    # reset client customer id
+    set_client_customer_id(old_client_customer_id)
+
+    result
+  end
+
+  def campains_of_all_accounts
+    campaigns = []
+    client_accounts.each do |account_id|
+      cs = campaigns_of_specify_account(account_id)
+      campaigns.push(*cs)
     end
+    campaigns.sort{ |a, b| a.id <=> b.id }
+  end
 
-    # get campaigns of accounts from root
-    def get_campaigns_of_accounts
-      campaigns = {}
-      
-      # first get all accounts hierarchy
-      accounts = get_accounts_hierarchy
-      root_customer_id = accounts.first[0]
-
-      # get all client accounts (only client accounts have campaigns)
-      client_accounts = Account.get_client_accounts(accounts)
-
-      # get all campaigns in each client accounts
-      client_accounts.each do |account|
-        set_client_customer_id(account.customer_id)
-        response = request_campaigns_list
-        if response
-          clients_campaigns = Campaign.get_campaigns_list(response)
-          # set owner for campaigns
-          clients_campaigns.each do |_, campaign|
-            campaign.owner = { :id => account.customer_id, :name => account.name }
-          end
-          # sort campaigns by key(campaign_id)
-          campaigns = Hash[campaigns.merge!(clients_campaigns).sort]
-        end
-      end
-
-      # reset client_customer_id as root
-      set_client_customer_id(root_customer_id)
-
-      # reutrn results
-      campaigns
-    end
-
-    # get list campaigns of a account by current customer_id
-    def request_campaigns_list
-      api = get_adwords_api()
-      service = api.service(:CampaignService, get_api_version())
-      selector = {
-        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
-        :ordering => [{:field => 'Id', :sort_order => 'ASCENDING'}],
-        :paging => {:start_index => 0, :number_results => PAGE_SIZE}
-      }
-      result = nil
-      begin
-        result = service.get(selector)
-      rescue AdwordsApi::Errors::ApiException => e
-        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
-        flash.now[:alert] = 'API request failed with an error, see logs for details'
-      end
-      return result
-    end
-
-    def request_campaign_by_id(campaign_id, owner_id)
-      api = get_adwords_api()
-      service = api.service(:CampaignService, get_api_version())
-      old_client_customer_id = api.credential_handler.credentials[:client_customer_id]
-      api.credential_handler.set_credential(:client_customer_id, owner_id)
-      selector = {
-        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
-        :ordering => [{:field => 'Name', :sort_order => 'ASCENDING'}],
-        :predicates => [
-          {
-            :field => 'Id',
-            :operator => 'EQUALS',
-            :values => [campaign_id]
-          }
-        ],
-        :paging => {:start_index => 0, :number_results => PAGE_SIZE}
-      }
-      result = nil
-      begin
-        result = service.get(selector)
-        api.credential_handler.set_credential(:client_customer_id, old_client_customer_id)
-      rescue AdwordsApi::Errors::ApiException => e
-        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
-        flash.now[:alert] = 'API request failed with an error, see logs for details'
-      end
-      return result
-    end
-
-    # get all accounts
-    def get_accounts_hierarchy
-      graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
-      accounts = Account.get_accounts_map(graph)
-    end
-
-    # set specify client_customer_id in api
-    def set_client_customer_id(customer_id)
-      api = get_adwords_api()
-      api.credential_handler.set_credential(:client_customer_id, customer_id)
-    end
+  def campaigns_of_specify_account(account_id)
+    xml = get_stats_report(account_id)
+    Campaign.get_campaign_list(xml).sort{ |a, b| a.id <=> b.id }
+  end
 end
