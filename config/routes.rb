@@ -5,6 +5,7 @@ AdwordsOnRails::Application.routes.draw do
   namespace :ads do
     namespace :google do
       get "campaigns", to: "campaign#index"
+      get "campaigns/select_date_range_type", to: 'campaign#select_date_range_type'
       get "campaign/:owner_id/:id", to: "campaign#show", as: 'campaign'
 
       get "account/index"

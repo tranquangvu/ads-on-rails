@@ -19,11 +19,6 @@ class Account
         result[account[:customer_id]] = Account.new(account)
         result
       end
-
-      # if accounts[:account_labels].nil?
-      #   accounts[:account_labels] = []
-      # end
-
       if graph[:links]
         graph[:links].each do |link|
           parent_account = accounts[link[:manager_customer_id]]

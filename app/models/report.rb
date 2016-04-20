@@ -102,6 +102,25 @@ class Report
     }
   }
 
+  DATE_RANGE_TYPES = {
+    'TODAY' => 'Today',
+    'YESTERDAY' => 'Yesterday',
+    'LAST_7_DAYS' => 'Last 7 days',
+    'LAST_WEEK' => 'Last week',
+    'LAST_BUSINESS_WEEK' => 'Last besiness week',
+    'THIS_MONTH' => 'This month',
+    'LAST_MONTH' => 'Last month',
+    'ALL_TIME' => 'All time',
+    'CUSTOM_DATE' => 'Custom date',
+    'LAST_14_DAYS' => 'Last 14 days',
+    'LAST_30_DAYS' => 'Last 30 days',
+    'THIS_WEEK_SUN_TODAY' => 'This week sun today',
+    'THIS_WEEK_MON_TODAY' => 'This week mon today',
+    'LAST_WEEK_SUN_SAT' => 'Last week sun sat'
+  }
+
+  DEFAULT_DATE_RANGE_TYPE = 'LAST_7_DAYS'
+
   attr_reader :id, :name
 
   def initialize(id, name)

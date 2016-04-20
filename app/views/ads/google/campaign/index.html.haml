@@ -1,61 +1,78 @@
 %h1.text-primary.text-xxxl.text-light
   All Campaigns
-- if @campaigns.nil? || @campaigns.empty?
-  %p No campaigns available.
-- else
-  .table-responsive
-    %table#campains-table.table.table-striped.table-hover
-      %thead
-        %tr
-          %th Id
-          %th Campaign
-          %th Client Account
-          %th Budget
-          %th Types
-          %th Status
-          %th Impr
-          %th Clicks
-          %th CTR
-          %th Avg. CPC
-          %th Cost
-      %tfoot
-        %tr
-          %th ID 
-          %th Campaign
-          %th Client Account
-          %th Budget
-          %th Types
-          %th Status
-          %th Impr
-          %th Clicks
-          %th CTR
-          %th Avg. CPC
-          %th Cost
-      %tbody
-        - @campaigns.each do |campaign|
-          %tr
-            %td
-              = link_to campaign.id, ads_google_campaign_path(campaign.customer_id, campaign.id)
-            %td
-              = link_to campaign.name, ads_google_campaign_path(campaign.customer_id, campaign.id)
-            %td
-              = campaign.customer_name
-            %td
-              = number_with_delimiter(campaign.amount).to_s + campaign. account_currency_code + '/' + campaign.period
-            %td
-              = campaign.advertising_channel_type
-            %td
-              = campaign.status
-            %td
-              = campaign.impressions
-            %td
-              = campaign.clicks
-            %td
-              = campaign.ctr
-            %td
-              = campaign.average_cpc
-            %td
-              = campaign.cost
+.row
+  = form_tag ads_google_campaigns_select_date_range_type_path, method: :get, :class => 'form' do
+    .col-lg-4.col-md-4.col-sm-6.col-xs-12
+      .form-group
+        = select_tag :date_range_type, options_for_select(Report::DATE_RANGE_TYPES.to_a.map { |type| type.reverse }, @date_range_type), class: 'form-control'
+        = label_tag(:date_range_type, 'Date Range Type')
+    .col-lg-8.col-md-8.col-sm-6.col-xs-12
+      .form-group#custom_start_date_input_group
+        = text_field_tag :custom_start_date, @custom_start_date, required: true, class: 'form-control datepicker'
+        = label_tag(:custom_start_date, 'Start Date')
+      .form-group#custom_end_date_input_group
+        = text_field_tag :custom_end_date, @custom_end_date, required: true, class: 'form-control datepicker'
+        = label_tag(:custom_end_date, 'End Date')
+      .form-group#date_range_type_submit
+        = submit_tag 'Apply', class: 'btn ink-reaction btn-raised btn-primary'
+.row
+  .col-lg-12.col-md-12.col-sm-12.col-xs-12
+    - if @campaigns.nil? || @campaigns.empty?
+      %p No campaigns available.
+    - else
+      .table-responsive
+        %table#campains-table.table.table-striped.table-hover
+          %thead
+            %tr
+              %th Id
+              %th Campaign
+              %th Client Account
+              %th Budget
+              %th Types
+              %th Status
+              %th Impr
+              %th Clicks
+              %th CTR
+              %th Avg. CPC
+              %th Cost
+          %tfoot
+            %tr
+              %th ID 
+              %th Campaign
+              %th Client Account
+              %th Budget
+              %th Types
+              %th Status
+              %th Impr
+              %th Clicks
+              %th CTR
+              %th Avg. CPC
+              %th Cost
+          %tbody
+            - @campaigns.each do |campaign|
+              %tr
+                %td
+                  = link_to campaign.id, ads_google_campaign_path(campaign.customer_id, campaign.id)
+                %td
+                  = link_to campaign.name, ads_google_campaign_path(campaign.customer_id, campaign.id)
+                %td
+                  = campaign.customer_name
+                %td
+                  = number_with_delimiter(campaign.amount).to_s + campaign. account_currency_code + '/' + campaign.period
+                %td
+                  = campaign.advertising_channel_type
+                %td
+                  = campaign.status
+                %td
+                  = campaign.impressions
+                %td
+                  = campaign.clicks
+                %td
+                  = campaign.ctr
+                %td
+                  = campaign.average_cpc
+                %td
+                  = campaign.cost
 
 :javascript
   $('#campains-table').DataTable({
@@ -73,6 +90,29 @@
         "previous": '<i class="fa fa-angle-left"></i>',
         "next": '<i class="fa fa-angle-right"></i>'
       }
+    }
+  });
+
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    todayBtn: true,
+    autoclose: true,
+    todayHighlight: true
+  });
+
+  if($('#date_range_type').val() != 'CUSTOM_DATE'){
+    $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').hide();
+  }
+  else{
+    $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').show();
+  }
+
+  $('#date_range_type').change(function(){
+    if($(this).val() == 'CUSTOM_DATE'){
+      $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').show();
+    }
+    else{
+      this.form.submit();
     }
   });
   

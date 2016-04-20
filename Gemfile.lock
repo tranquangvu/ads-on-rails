@@ -50,6 +50,8 @@ GEM
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-datepicker-rails (1.6.0.1)
+      railties (>= 3.0)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -64,7 +66,7 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.1)
     debug_inspector (0.0.2)
-    devise (3.5.6)
+    devise (3.5.7)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -242,6 +244,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
+  bootstrap-datepicker-rails
   bootstrap-sass (~> 3.3, >= 3.3.6)
   byebug
   coffee-rails (~> 4.1.0)

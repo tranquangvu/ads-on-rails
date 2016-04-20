@@ -1,6 +1,9 @@
 require 'adwords_api'
 
 class Ads::Google::MasterController < Ads::AdsController
+  before_action :authenticate_user!
+  before_filter :authenticate
+  
   private
   
   # Returns the API version in use.

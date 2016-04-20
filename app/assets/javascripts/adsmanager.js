@@ -34,6 +34,7 @@
 //= require libs/DataTables/jquery.dataTables.min
 //= require libs/DataTables/extensions/ColVis/js/dataTables.colVis.min
 //= require libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min
+//= require bootstrap-datepicker
 
 // init progress bar
 NProgress.configure({
