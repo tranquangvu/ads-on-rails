@@ -21,25 +21,23 @@ class Campaign
   def self.get_campaign_list(xml)
     campaigns = []
     doc = Nokogiri::Slop(xml)
-    unless doc.xpath('//row').empty? 
-      doc.report.table.row.each do |row|
-        campaigns << Campaign.new({
-          :id => row[:campaignID],
-          :name => row[:campaign],
-          :status => row[:campaignState],
-          :account_currency_code => row[:currency],
-          :amount => row[:budget],
-          :period => row[:budgetPeriod],
-          :impressions => row[:impressions],
-          :clicks => row[:clicks],
-          :ctr => row[:ctr],
-          :average_cpc => row[:avgCPC],
-          :cost => row[:cost],
-          :advertising_channel_type => row[:advertisingChannel],
-          :customer_id => row[:customerID],
-          :customer_name => row[:clientName]
-        })
-      end
+    doc.xpath('//row').each do |row|
+      campaigns << Campaign.new({
+        :id => row[:campaignID],
+        :name => row[:campaign],
+        :status => row[:campaignState],
+        :account_currency_code => row[:currency],
+        :amount => row[:budget],
+        :period => row[:budgetPeriod],
+        :impressions => row[:impressions],
+        :clicks => row[:clicks],
+        :ctr => row[:ctr],
+        :average_cpc => row[:avgCPC],
+        :cost => row[:cost],
+        :advertising_channel_type => row[:advertisingChannel],
+        :customer_id => row[:customerID],
+        :customer_name => row[:clientName]
+      })
     end
     campaigns
   end
