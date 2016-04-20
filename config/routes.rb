@@ -1,4 +1,10 @@
 AdwordsOnRails::Application.routes.draw do
+  namespace :ads do
+  namespace :facebook do
+    get 'master/index'
+    end
+  end
+
   devise_for :users, :controllers => { registrations: 'registrations' }
   resources :after_signup, only: [:show, :update]
   

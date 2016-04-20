@@ -72,9 +72,9 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
-    dotenv (2.1.0)
-    dotenv-rails (2.1.0)
-      dotenv (= 2.1.0)
+    dotenv (2.1.1)
+    dotenv-rails (2.1.1)
+      dotenv (= 2.1.1)
       railties (>= 4.0, < 5.1)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -172,7 +172,7 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     ref (2.0.0)
-    responders (2.1.1)
+    responders (2.1.2)
       railties (>= 4.2.0, < 5.1)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
@@ -227,9 +227,8 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.2)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
+    uglifier (3.0.0)
+      execjs (>= 0.3.0, < 3)
     warden (1.2.6)
       rack (>= 1.0)
     wasabi (3.5.0)
@@ -248,6 +247,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
+  bcrypt
   bootstrap-sass (~> 3.3, >= 3.3.6)
   byebug
   coffee-rails (~> 4.1.0)
@@ -262,6 +262,7 @@ DEPENDENCIES
   oauth2
   pg (~> 0.18.4)
   rails (= 4.2.5)
+  rake
   rspec-rails (~> 3.4, >= 3.4.2)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
