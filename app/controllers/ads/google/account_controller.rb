@@ -1,7 +1,4 @@
 class Ads::Google::AccountController < Ads::Google::MasterController
-  before_action :authenticate_user!
-  before_filter :authenticate
-
   def index()
     @selected_account = selected_account
     graph = get_accounts_graph()
