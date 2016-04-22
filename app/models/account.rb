@@ -15,10 +15,6 @@ class Account
     @child_accounts = []
   end
 
-  def account_labels=(als)
-    @account_labels = als
-  end
-
   def self.get_data_client_accounts(xml)
     data = Nokogiri::Slop(xml)
     row = data.report.table.row
@@ -45,4 +41,9 @@ class Account
   def add_child(child)
     @child_accounts << child
   end
+
+  def account_labels=(als)
+    @account_labels = als
+  end
+
 end
