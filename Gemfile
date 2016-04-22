@@ -27,6 +27,9 @@ gem 'bcrypt'
 
 gem 'rake'
 
+# Facebook Ads API Gem
+gem 'zuck'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
