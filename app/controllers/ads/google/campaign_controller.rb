@@ -1,113 +1,137 @@
 class Ads::Google::CampaignController < Ads::Google::MasterController
-  
-  PAGE_SIZE = 50
-  
+  before_action :init_state, only: [:index]
+
   def index
-    @campaigns = selected_account ? get_campaigns_of_this_account : get_campaigns_of_accounts
+    date_range = { :date_range_type => @date_range_type }
+    if @date_range_type.eql? 'CUSTOM_DATE'
+      date_range[:min_date] = Date.parse(@custom_start_date).strftime('%Y%m%d')
+      date_range[:max_date] = Date.parse(@custom_end_date).strftime('%Y%m%d')
+    end
+    @selected_account = selected_account
+    @campaigns = selected_account ? campaigns_of_specify_account(selected_account, date_range) : campains_of_list_accounts(@selected_account_ids, date_range)
   end
 
   def show
-    response = request_campaign_by_id(params[:id].to_i, params[:owner_id].to_i)
-    @campaign = Campaign.get_campaigns_list(response).first[1] if response
+    
+  end
+
+  def filter
+    if params[:date_range_type].eql? 'CUSTOM_DATE'
+      redirect_to ads_google_campaigns_path(
+        :date_range_type => params[:date_range_type],
+        :custom_start_date => params[:custom_start_date],
+        :custom_end_date => params[:custom_end_date],
+        :selected_account_ids => params[:selected_account_ids]
+        )
+    else
+      redirect_to ads_google_campaigns_path(
+        :date_range_type => params[:date_range_type],
+        :selected_account_ids => params[:selected_account_ids]
+        )
+    end
   end
 
   private
-    # get campaigns by current selected account
-    def get_campaigns_of_this_account
-      campaigns = {}
-      response = request_campaigns_list
-      campaigns = Campaign.get_campaigns_list(response) if response
+
+  def init_state
+    @date_range_type = params[:date_range_type] || Report::DEFAULT_DATE_RANGE_TYPE
+    @custom_start_date = params[:custom_start_date] || Date.today.strftime('%Y-%m-%d')
+    @custom_end_date = params[:custom_end_date] || Date.today.strftime('%Y-%m-%d')
+    unless selected_account
+      @all_client_accounts = all_client_accounts
+      @selected_account_ids = params[:selected_account_ids] || @all_client_accounts.map{ |a| a[:customer_id] }
     end
+  end
 
-    # get campaigns of accounts from root
-    def get_campaigns_of_accounts
-      campaigns = {}
-      
-      # first get all accounts hierarchy
-      accounts = get_accounts_hierarchy
-      root_customer_id = accounts.first[0]
-
-      # get all client accounts (only client accounts have campaigns)
-      client_accounts = Account.get_client_accounts(accounts)
-
-      # get all campaigns in each client accounts
-      client_accounts.each do |account|
-        set_client_customer_id(account.customer_id)
-        response = request_campaigns_list
-        if response
-          clients_campaigns = Campaign.get_campaigns_list(response)
-          # set owner for campaigns
-          clients_campaigns.each do |_, campaign|
-            campaign.owner = { :id => account.customer_id, :name => account.name }
-          end
-          # sort campaigns by key(campaign_id)
-          campaigns = Hash[campaigns.merge!(clients_campaigns).sort]
-        end
-      end
-
-      # reset client_customer_id as root
-      set_client_customer_id(root_customer_id)
-
-      # reutrn results
-      campaigns
+  def all_client_accounts
+    result = []
+    graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
+    if graph && graph[:links] && graph[:entries]
+      ids = graph[:links].map{ |link| link[:client_customer_id] }
+      result = graph[:entries].select{ |e| ids.include?(e[:customer_id]) }
     end
+    result
+  end
 
-    # get list campaigns of a account by current customer_id
-    def request_campaigns_list
-      api = get_adwords_api()
-      service = api.service(:CampaignService, get_api_version())
-      selector = {
-        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
-        :ordering => [{:field => 'Id', :sort_order => 'ASCENDING'}],
-        :paging => {:start_index => 0, :number_results => PAGE_SIZE}
-      }
-      result = nil
-      begin
-        result = service.get(selector)
-      rescue AdwordsApi::Errors::ApiException => e
-        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
-        flash.now[:alert] = 'API request failed with an error, see logs for details'
-      end
-      return result
-    end
+  def adwords
+    get_adwords_api
+  end
 
-    def request_campaign_by_id(campaign_id, owner_id)
-      api = get_adwords_api()
-      service = api.service(:CampaignService, get_api_version())
-      old_client_customer_id = api.credential_handler.credentials[:client_customer_id]
-      api.credential_handler.set_credential(:client_customer_id, owner_id)
-      selector = {
-        :fields => ['Id', 'Name', 'Status', 'BudgetId', 'Amount', 'AdvertisingChannelType'],
-        :ordering => [{:field => 'Name', :sort_order => 'ASCENDING'}],
-        :predicates => [
-          {
-            :field => 'Id',
-            :operator => 'EQUALS',
-            :values => [campaign_id]
-          }
-        ],
-        :paging => {:start_index => 0, :number_results => PAGE_SIZE}
-      }
-      result = nil
-      begin
-        result = service.get(selector)
-        api.credential_handler.set_credential(:client_customer_id, old_client_customer_id)
-      rescue AdwordsApi::Errors::ApiException => e
-        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
-        flash.now[:alert] = 'API request failed with an error, see logs for details'
-      end
-      return result
-    end
+  def get_client_customer_id
+    adwords.credential_handler.credentials[:client_customer_id]
+  end
 
-    # get all accounts
-    def get_accounts_hierarchy
-      graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
-      accounts = Account.get_accounts_map(graph)
-    end
+  def set_client_customer_id(customer_id)
+    adwords.credential_handler.set_credential(:client_customer_id, customer_id)
+  end
 
-    # set specify client_customer_id in api
-    def set_client_customer_id(customer_id)
-      api = get_adwords_api()
-      api.credential_handler.set_credential(:client_customer_id, customer_id)
+  def create_report_definition(date_range)
+    definition = {
+      :selector => {
+        :fields => ['CampaignId', 'CampaignName', 'CampaignStatus', 'AccountCurrencyCode', 'Amount', 'Period', 'Impressions', 'Clicks', 'Ctr', 'AverageCpc', 'Cost', 'AdvertisingChannelType', 'ExternalCustomerId', 'CustomerDescriptiveName']
+      },
+      :report_name => 'CAMPAIGN_PERFORMANCE_REPORT',
+      :report_type => 'CAMPAIGN_PERFORMANCE_REPORT',
+      :download_format => 'XML',
+      :date_range_type => date_range[:date_range_type]
+    }
+    definition[:selector][:date_range] = { :min => date_range[:min_date], :max => date_range[:max_date] } if date_range[:date_range_type].eql?('CUSTOM_DATE') && date_range[:min_date] && date_range[:max_date]
+    definition
+  end
+
+  def get_stats_report(customer_id, date_range)
+    # get client customer id before excute
+    old_client_customer_id = get_client_customer_id
+
+    set_client_customer_id(customer_id)
+    report_utils = adwords.report_utils
+    report_definition = create_report_definition(date_range)
+    result = report_utils.download_report(report_definition)
+
+    # reset client customer id
+    set_client_customer_id(old_client_customer_id)
+
+    result
+  end
+
+  def campains_of_list_accounts(client_accounts_id, date_range)
+    campaigns = []
+    client_accounts_id.each do |account_id|
+      cs = campaigns_of_specify_account(account_id, date_range)
+      campaigns.push(*cs)
     end
+    campaigns.sort{ |a, b| a.id <=> b.id }
+  end
+
+  def campaigns_of_specify_account(account_id, date_range)
+    xml = get_stats_report(account_id, date_range)
+    Campaign.get_campaign_list(xml).sort{ |a, b| a.id <=> b.id }
+  end
+
+  def get_accounts_graph_with_fields(fields)
+    adwords = get_adwords_api()
+    result = nil
+    begin
+      # First get the AdWords manager account ID.
+      customer_srv = adwords.service(:CustomerService, get_api_version())
+      customer = customer_srv.get()
+      adwords.credential_handler.set_credential(
+          :client_customer_id, customer[:customer_id])
+
+      # Then find all child accounts using that ID.
+      managed_customer_srv = adwords.service(
+          :ManagedCustomerService, get_api_version())
+      selector = {:fields => fields}
+
+      result = managed_customer_srv.get(selector)
+    rescue AdwordsApi::Errors::ApiException => e
+      logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
+      flash.now[:alert] =
+          'API request failed with an error, see logs for details'
+    rescue NoMethodError => e
+      [:selected_account, :token].each {|key| session.delete(key)}
+      redirect_to ads_google_login_prompt_path, notice: 'Your google authentication is out of date. Login to continue.' and return nil
+    end
+    return result
+  end
 end

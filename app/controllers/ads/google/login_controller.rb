@@ -1,7 +1,6 @@
 require 'adwords_api'
 
 class Ads::Google::LoginController < Ads::Google::MasterController
-  
   skip_before_filter :authenticate
 
   def prompt()

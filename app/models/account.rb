@@ -19,11 +19,6 @@ class Account
         result[account[:customer_id]] = Account.new(account)
         result
       end
-
-      # if accounts[:account_labels].nil?
-      #   accounts[:account_labels] = []
-      # end
-
       if graph[:links]
         graph[:links].each do |link|
           parent_account = accounts[link[:manager_customer_id]]
@@ -39,23 +34,6 @@ class Account
 
   def add_child(child)
     @child_accounts << child
-  end
-
-  # get all clients account from root
-  def self.get_client_accounts(root)
-    if root.is_a? Hash
-      return get_client_accounts(root.first[1].child_accounts)
-    else
-      result = []
-      root.each do |account|
-        if account.child_accounts.empty?
-          result << account
-        else
-          result << get_client_accounts(account)
-        end
-      end
-      return result
-    end
   end
   
 end
