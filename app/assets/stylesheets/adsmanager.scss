@@ -14,7 +14,8 @@
 @import "libs/DataTables/jquery.dataTables";
 @import "libs/DataTables/extensions/dataTables.colVis";
 @import "libs/DataTables/extensions/dataTables.tableTools";
-@import "bootstrap-datepicker3";
+@import "libs/bootstrap-datepicker/datepicker3";
+@import "libs/select2/select2";
 @import "app_fonts";
 
 body{
@@ -25,12 +26,12 @@ body{
   border-radius: 0 !important;
 }
 
-#custom_start_date_input_group, #custom_end_date_input_group{
+#custom_start_date_group, #custom_end_date_group{
   width: 40%;
   display: inline-block;
 }
 
-#date_range_type_submit{
+#campaigns_filter_submit{
   width: 15%;
   display: inline-block;
 }

@@ -1,20 +1,28 @@
 %h1.text-primary.text-xxxl.text-light
   All Campaigns
 .row
-  = form_tag ads_google_campaigns_select_date_range_type_path, method: :get, :class => 'form' do
-    .col-lg-4.col-md-4.col-sm-6.col-xs-12
-      .form-group
-        = select_tag :date_range_type, options_for_select(Report::DATE_RANGE_TYPES.to_a.map { |type| type.reverse }, @date_range_type), class: 'form-control'
-        = label_tag(:date_range_type, 'Date Range Type')
-    .col-lg-8.col-md-8.col-sm-6.col-xs-12
-      .form-group#custom_start_date_input_group
-        = text_field_tag :custom_start_date, @custom_start_date, required: true, class: 'form-control datepicker'
-        = label_tag(:custom_start_date, 'Start Date')
-      .form-group#custom_end_date_input_group
-        = text_field_tag :custom_end_date, @custom_end_date, required: true, class: 'form-control datepicker'
-        = label_tag(:custom_end_date, 'End Date')
-      .form-group#date_range_type_submit
-        = submit_tag 'Apply', class: 'btn ink-reaction btn-raised btn-primary'
+  = form_tag ads_google_campaigns_filter_path, method: :get, :class => 'form' do
+    - unless @selected_account
+      .col-lg-12.col-md-12.col-sm-12.col-xs-12
+        .form-group
+          = select_tag :selected_account_ids, options_for_select(@all_client_accounts.map{ |acc| [acc[:name], acc[:customer_id]] }, @selected_account_ids), multiple: true, class: 'form-control'
+          = label_tag(:selected_account_ids, 'Selected Account')
+    .col-lg-12.col-md-12.col-sm-12.col-xs-12
+      .row
+        .col-lg-4.col-md-4.col-sm-6.col-xs-12
+          .form-group
+            = select_tag :date_range_type, options_for_select(Report::DATE_RANGE_TYPES.to_a.map { |type| type.reverse }, @date_range_type), class: 'form-control'
+            = label_tag(:date_range_type, 'Date Range Type')
+        .col-lg-8.col-md-8.col-sm-6.col-xs-12
+          .form-group#custom_start_date_group
+            = text_field_tag :custom_start_date, @custom_start_date, required: true, class: 'form-control datepicker'
+            = label_tag(:custom_start_date, 'Start Date')
+          .form-group#custom_end_date_group
+            = text_field_tag :custom_end_date, @custom_end_date, required: true, class: 'form-control datepicker'
+            = label_tag(:custom_end_date, 'End Date')
+          .form-group#campaigns_filter_submit
+            = button_tag type: 'submit', class: 'btn ink-reaction btn-floating-action btn-primary' do
+              %i.md.md-done-all
 .row
   .col-lg-12.col-md-12.col-sm-12.col-xs-12
     - if @campaigns.nil? || @campaigns.empty?
@@ -58,7 +66,7 @@
                 %td
                   = campaign.customer_name
                 %td
-                  = number_with_delimiter(campaign.amount).to_s + campaign. account_currency_code + '/' + campaign.period
+                  = number_with_delimiter(campaign.amount.to_i/1000000).to_s + campaign. account_currency_code + '/' + campaign.period
                 %td
                   = campaign.advertising_channel_type
                 %td
@@ -75,6 +83,7 @@
                   = campaign.cost
 
 :javascript
+  // init datatable for campains data
   $('#campains-table').DataTable({
     "dom": 'lCfrtip',
     "order": [],
@@ -93,6 +102,10 @@
     }
   });
 
+  // init select2 for account selector
+  $('#selected_account_ids').select2();
+
+  // init datepicker for custom_start_date and custom_end_date input
   $('.datepicker').datepicker({
     format: 'yyyy-mm-dd',
     todayBtn: true,
@@ -100,19 +113,17 @@
     todayHighlight: true
   });
 
-  if($('#date_range_type').val() != 'CUSTOM_DATE'){
-    $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').hide();
-  }
-  else{
-    $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').show();
-  }
-
+  // show or hide custom date input
+  toggleShow();
   $('#date_range_type').change(function(){
-    if($(this).val() == 'CUSTOM_DATE'){
-      $('#custom_start_date_input_group, #custom_end_date_input_group, #date_range_type_submit').show();
+    toggleShow();
+  });
+
+  function toggleShow() {
+    if($('#date_range_type').val() == 'CUSTOM_DATE'){
+      $('#custom_start_date_group, #custom_end_date_group').show();
     }
     else{
-      this.form.submit();
+      $('#custom_start_date_group, #custom_end_date_group').hide();
     }
-  });
-  
+  }
