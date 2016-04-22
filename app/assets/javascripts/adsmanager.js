@@ -25,16 +25,15 @@
 //= require libs/rickshaw/rickshaw
 //= require core/source/App
 //= require core/source/AppNavigation
-//= require core/source/AppOffcanvas
 //= require core/source/AppCard
-//= require core/source/AppForm
 //= require core/source/AppNavSearch
 //= require core/source/AppVendor
 //= require core/demo/Demo
 //= require libs/DataTables/jquery.dataTables.min
 //= require libs/DataTables/extensions/ColVis/js/dataTables.colVis.min
 //= require libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min
-//= require bootstrap-datepicker
+//= require libs/bootstrap-datepicker/bootstrap-datepicker
+//= require libs/select2/select2.min
 
 // init progress bar
 NProgress.configure({
