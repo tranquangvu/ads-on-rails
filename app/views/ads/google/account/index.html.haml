@@ -1,18 +1,28 @@
 %h1.text-primary.text-xxxl.text-light
   Accounts
-%ul
-  - if @accounts.empty?
+  
+/ = link_to(:controller => 'account', :action => 'select', :account_id => @current_account.id) do
+%h4.text-accent
+  %i.fa.fa-dot-circle-o.text-accent
+  Account Selected: #{@current_account.name} - #{@current_account.id.to_s}
+- if @accounts.empty?
+  %ul
     %li
       No accounts available.
-  - else
-    - @accounts.each_pair do |id, account|
-      = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) do
-        %h4.text-accent
-          %i.fa.fa-dot-circle-o.text-accent
-          Root Account: #{account.name} - #{account.customer_id.to_s}
-      - unless account.child_accounts.empty?
+- else
+  .card.card-underline
+    .card-head
+      %ul.nav.nav-tabs.pull-left{"data-toggle" => "tabs"}
+        %li.active
+          %a{:href => "#performance"} Performance
+        %li
+          %a{:href => "#budget"} Budget
+        %li
+          %a{:href => "#admin"} Admin
+    .card-body.tab-content
+      .tab-pane#performance.active
         .table-responsive
-          %table#account-table.table.table-striped.table-hover
+          %table#account-table-performance.table.table-striped.table-hover
             %thead
               %tr
                 %th
@@ -22,11 +32,17 @@
                 %th
                   Account Label
                 %th
-                  Company Name
+                  Clicks
                 %th
-                  Currency Code
+                  Impr.
                 %th
-                  Date Time Zone
+                  CTR
+                %th
+                  conversions
+                %th
+                  Conv.rate
+                %th
+                  Cost
             %tfoot
               %tr
                 %th
@@ -36,34 +52,138 @@
                 %th
                   Account Label
                 %th
-                  Company Name
+                  Clicks
                 %th
-                  Currency Code
+                  Impr.
                 %th
-                  Date Time Zone
+                  CTR
+                %th
+                  conversions
+                %th
+                  Conv.rate
+                %th
+                  Cost
             %tbody
-              / - sorted_accounts = account.child_accounts.sort {|a, b| a.customer_id <=> b.customer_id}
-              - account.child_accounts.each do |account|
+              - @accounts.each do |account|
                 %tr
                   %td
-                    = link_to(:controller => 'account', :action => 'select', :account_id => account.customer_id) { account.name }
+                    = link_to account.name, {:controller => 'account', :action => 'select', :account_id => account.id}
                   %td
-                    = account.customer_id.to_s
+                    = account.id
                   %td
                     - if account.account_labels.nil?
-                      = ''
+                      = '_ _'
                     - else
-                      - account.account_labels.each do |account_label|
-                        = account_label[:name]
-                        %br
+                      - account.account_labels.each do |label|
+                        %div 
+                          = label[:name]
                   %td
-                    = account.company_name
+                    = account.clicks
                   %td
-                    = account.currency_code
+                    = account.impressions
                   %td
-                    = account.date_time_zone
+                    = account.ctr
+                  %td
+                    = account.conversions
+                  %td
+                    = account.convRate
+                  %td
+                    = account.cost
+
+      .tab-pane#budget
+        %h1 Tag budget
+      /   .table-responsive
+      /     %table#account-table-budget.table.table-striped.table-hover
+      /       %thead
+      /         %tr
+      /           %th
+      /             Account
+      /           %th
+      /             Account Label
+      /           %th
+      /             Company Name
+      /           %th
+      /             Currency Code
+      /           %th
+      /             Date Time Zone
+      /       %tfoot
+      /         %tr
+      /           %th
+      /             Account
+      /           %th
+      /             Account Label
+      /           %th
+      /             Company Name
+      /           %th
+      /             Currency Code
+      /           %th
+      /             Date Time Zone
+      /       %tbody
+      /         / - sorted_accounts = account.child_accounts.sort {|a, b| a.id <=> b.id}
+      /         - account.child_accounts.each do |account|
+      /           %tr
+      /             %td
+      /               %div
+      /                 = link_to(:controller => 'account', :action => 'select', :account_id => account.id) { account.name }
+      /               %div
+      /                 = account.id.to_s
+      /             %td
+      /               - if account.account_labels.nil?
+      /                 = ''
+      /               - else
+      /                 - account.account_labels.each do |account_label|
+      /                   = account_label[:name]
+      /                   %br
+      /             %td
+      /             %td
+      /             %td
+      .tab-pane#admin
+        .table-responsive
+          %table#account-table-performance.table.table-striped.table-hover
+            %thead
+              %tr
+                %th
+                  Account
+                %th
+                  Account Id
+                %th
+                  Account Label
+                %th
+                  Conversion account
+                %th
+                  Remarketing account
+            %tfoot
+              %tr
+                %th
+                  Account
+                %th
+                  Account Id
+                %th
+                  Account Label
+                %th
+                  Conversion account
+                %th
+                  Remarketing account
+            %tbody
+              - @accounts.each do |account|
+                %tr
+                  %td
+                    = link_to account.name, {:controller => 'account', :action => 'select', :account_id => account.id}
+                  %td
+                    = account.id
+                  %td
+                    - if account.account_labels.nil?
+                      = '_ _'
+                    - else
+                      - account.account_labels.each do |label|
+                        %div 
+                          = label[:name]
+                  %td
+                  %td
+                    
+
 :javascript
-  $('#account-table').DataTable({
+  $('#account-table-performance, #account-table-budget, #account-table-admin').DataTable({
     "dom": 'lCfrtip',
     "order": [],
     "colVis": {

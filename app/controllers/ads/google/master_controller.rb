@@ -5,7 +5,7 @@ class Ads::Google::MasterController < Ads::AdsController
   
   # Returns the API version in use.
   def get_api_version()
-    return :v201509
+    return :v201603
   end
 
   # Returns currently selected account.
