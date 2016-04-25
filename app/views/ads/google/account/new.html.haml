@@ -1,0 +1,13 @@
+= form_tag controller: "account", action: "create_account" , method: "post" do
+  .form-group
+    = label_tag :name, "Enter a name for this account (this is the name you will see in your MCC for this client account)."
+    = text_field_tag :name 
+
+  .form-group
+    = label_tag :currency_code, "Select a permanent currency for your account."
+    = select_tag :currency_code, options_for_select(Account::CURRENCY_LIST.to_a.map { |type| type.reverse }), class: 'form-control'
+
+  .form-group
+    = label_tag :date_time_zone, "Time zone:"
+    = select_tag :date_time_zone, options_for_select([['Vietnam', 'Asia/Saigon']]), class: 'form-control'
+  = button_tag("Create", type: "submit", class: "btn btn-primary")

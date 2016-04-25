@@ -11,6 +11,7 @@ AdwordsOnRails::Application.routes.draw do
       get "account/index"
       get "account/input"
       get "account/select"
+      get "account/new"
 
       get "login/prompt"
       get "login/callback"
@@ -18,6 +19,7 @@ AdwordsOnRails::Application.routes.draw do
 
       get "report/index"
       post "report/get"
+      post "account/create_account"
       
       root "account#index"
     end

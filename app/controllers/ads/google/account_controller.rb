@@ -11,6 +11,57 @@ class Ads::Google::AccountController < Ads::Google::MasterController
     redirect_to ads_google_account_index_path
   end
 
+  def create_account()
+    begin
+      managed_customer_srv = adwords.service(:ManagedCustomerService, get_api_version())
+
+      # Create a local Customer object.
+      customer = {
+        :name => params[:name],
+        :currency_code => params[:currency_code],
+        :date_time_zone => params[:date_time_zone]
+      }
+
+      # Prepare operation to create an account.
+      operation = {
+        :operator => 'ADD',
+        :operand => customer
+      }
+      # Create the account. It is possible to create multiple accounts with one
+      # request by sending an array of operations.
+      response = managed_customer_srv.mutate([operation])
+
+      response[:value].each do |new_account|
+        puts "Account with customer ID '%s' was successfully created." %
+          AdwordsApi::Utils.format_id(new_account[:customer_id])
+      end
+
+      redirect_to ads_google_account_index_path
+    # Authorization error.
+    rescue AdsCommon::Errors::OAuth2VerificationRequired => e
+      puts "Authorization credentials are not valid. Edit adwords_api.yml for " +
+          "OAuth2 client ID and secret and run misc/setup_oauth2.rb example " +
+          "to retrieve and store OAuth2 tokens."
+      puts "See this wiki page for more details:\n\n  " +
+          'https://github.com/googleads/google-api-ads-ruby/wiki/OAuth2'
+
+    # HTTP errors.
+    rescue AdsCommon::Errors::HttpError => e
+      puts "HTTP Error: %s" % e
+
+    # API errors.
+    rescue AdwordsApi::Errors::ApiException => e
+      puts "Message: %s" % e.message
+      puts 'Errors:'
+      e.errors.each_with_index do |error, index|
+        puts "\tError [%d]:" % (index + 1)
+        error.each do |field, value|
+          puts "\t\t%s: %s" % [field, value]
+        end
+      end
+    end
+  end
+
   private
 
   # get all accounts
