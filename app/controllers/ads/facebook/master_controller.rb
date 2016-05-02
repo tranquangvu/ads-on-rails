@@ -1,11 +1,9 @@
-#require 'zuck'
+require 'zuck'
+require 'koala'
 
 class Ads::Facebook::MasterController < ApplicationController
   before_action :authenticate_user!
   before_filter :authenticate
-  
-  def index
-  end
 
   private
     def authenticate
