@@ -12,6 +12,7 @@ AdwordsOnRails::Application.routes.draw do
       get "account/input"
       get "account/select"
       get "account/new"
+      get 'account/update_time_zone', as: 'update_time_zone'
 
       get "login/prompt"
       get "login/callback"

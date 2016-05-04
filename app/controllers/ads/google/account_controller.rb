@@ -5,6 +5,20 @@ class Ads::Google::AccountController < Ads::Google::MasterController
     @current_account = Account.get_current_account(get_account_list())
   end
 
+  def new()
+    @countries = Country.all
+    @time_zones = TimeZone.where("country_id = ?", Country.first.id)
+  end
+
+  def update_time_zone
+    country_id = Country.find_by(value: params[:country_value]).id
+    @time_zones = TimeZone.where("country_id = ?", country_id).order(id: :asc)
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def select()
     self.selected_account = params[:account_id]
     flash[:notice] = "Selected account: %s" % selected_account
@@ -13,6 +27,11 @@ class Ads::Google::AccountController < Ads::Google::MasterController
 
   def create_account()
     begin
+      # Get the AdWords manager account ID.
+      customer_srv = adwords.service(:CustomerService, get_api_version())
+      customer = customer_srv.get()
+      adwords.credential_handler.set_credential(:client_customer_id, customer[:customer_id])
+      
       managed_customer_srv = adwords.service(:ManagedCustomerService, get_api_version())
 
       # Create a local Customer object.
@@ -27,14 +46,16 @@ class Ads::Google::AccountController < Ads::Google::MasterController
         :operator => 'ADD',
         :operand => customer
       }
+
       # Create the account. It is possible to create multiple accounts with one
       # request by sending an array of operations.
-      response = managed_customer_srv.mutate([operation])
+      managed_customer_srv.mutate([operation])
+      # response = managed_customer_srv.mutate([operation])
 
-      response[:value].each do |new_account|
-        puts "Account with customer ID '%s' was successfully created." %
-          AdwordsApi::Utils.format_id(new_account[:customer_id])
-      end
+      # response[:value].each do |new_account|
+      #   puts "Account with customer ID '%s' was successfully created." %
+      #     AdwordsApi::Utils.format_id(new_account[:customer_id])
+      # end
 
       redirect_to ads_google_account_index_path
     # Authorization error.

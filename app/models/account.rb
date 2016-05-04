@@ -49,6 +49,17 @@ class Account
     'VND' => 'Vietnamese Dong (VND ₫)'
   }
 
+  TIME_ZONE = {
+    'AF' => {
+      :value => 'Asia/Kabul',
+      :name => '(GMT+04:30) Kabul'
+    },
+    'BF' => {
+      :value => 'Asia/Kabul',
+      :name => '(GMT+05:30) Kabulllllll'
+    }
+  }
+
   attr_reader :id, :name, :account_labels, :clicks, :impressions, :ctr, :conversions, :convRate, :cost, :child_accounts
   attr_accessor :parent
 
@@ -94,6 +105,10 @@ class Account
 
   def account_labels=(als)
     @account_labels = als
+  end
+
+  def self.time_zone(country_value)
+    p @country_value
   end
 
 end
