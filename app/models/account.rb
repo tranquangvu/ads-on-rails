@@ -49,17 +49,6 @@ class Account
     'VND' => 'Vietnamese Dong (VND ₫)'
   }
 
-  TIME_ZONE = {
-    'AF' => {
-      :value => 'Asia/Kabul',
-      :name => '(GMT+04:30) Kabul'
-    },
-    'BF' => {
-      :value => 'Asia/Kabul',
-      :name => '(GMT+05:30) Kabulllllll'
-    }
-  }
-
   attr_reader :id, :name, :account_labels, :clicks, :impressions, :ctr, :conversions, :convRate, :cost, :child_accounts
   attr_accessor :parent
 
