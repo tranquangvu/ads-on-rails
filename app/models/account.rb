@@ -67,18 +67,21 @@ class Account
 
   def self.get_data_client_accounts(xml)
     data = Nokogiri::Slop(xml)
-    row = data.report.table.row
-    Account.new({
-      :id => row[:customerID],
-      :name => row[:account],
-      :account_labels => row[:accountLabels],
-      :clicks => row[:clicks],
-      :impressions => row[:impressions],
-      :ctr => row[:ctr],
-      :conversions => row[:conversions],
-      :convRate => row[:convRate],
-      :cost => row[:cost]
-    })
+
+    unless data.report.table.at_xpath('row').nil?
+      row = data.report.table.row 
+      Account.new({
+        :id => row[:customerID],
+        :name => row[:account],
+        :account_labels => row[:accountLabels],
+        :clicks => row[:clicks],
+        :impressions => row[:impressions],
+        :ctr => row[:ctr],
+        :conversions => row[:conversions],
+        :convRate => row[:convRate],
+        :cost => row[:cost]
+      })
+    end
   end
 
   def self.get_current_account(graph)
@@ -94,10 +97,6 @@ class Account
 
   def account_labels=(als)
     @account_labels = als
-  end
-
-  def self.time_zone(country_value)
-    p @country_value
   end
 
 end
