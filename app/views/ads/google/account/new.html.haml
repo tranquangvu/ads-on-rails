@@ -1,0 +1,37 @@
+.new-account
+  %h3 Create an AdWords account
+  %h5 To set up a new AdWords account that will be linked automatically to your MCC, we need to know the time zone and currency of the new account (the currency that you'll use to pay Google). Please note that currency once set cannot be changed. 
+  = form_tag controller: "account", action: "create_account" , method: "post" do
+    .row.form-group
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        = label_tag :name, "Enter a name for this account (this is the name you will see in your MCC for this client account)"
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        = text_field_tag :name, nil, class: "form-control"
+    .row
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        .form-group
+          = label_tag :country_select, "Time zone country or territory"
+          = select_tag :country_select, options_for_select(@countries.collect { |country| [country.name, country.value] }), class: 'form-control'
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        .form-group
+          = label_tag :date_time_zone, "Time zone"
+          = select_tag :date_time_zone, options_for_select(@time_zones.collect { |timezone| [timezone.name, timezone.value] }), class: 'form-control'
+    .row
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        .form-group
+          = label_tag :currency_code, "Select a permanent currency for your account"
+          = select_tag :currency_code, options_for_select(Account::CURRENCY_LIST.to_a.map { |type| type.reverse }), class: 'form-control'
+    = button_tag("Create", type: "submit", class: "btn btn-primary")
+
+:javascript
+  $(function() {
+    return $(document).on('change', '#country_select', function(evt) {
+      return $.ajax('update_time_zone', {
+        type: 'GET',
+        dataType: 'script',
+        data: {
+          country_value: $("#country_select option:selected").val()
+        }
+      });
+    });
+  });
