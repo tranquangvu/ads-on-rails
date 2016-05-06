@@ -163,6 +163,7 @@ class Ads::Google::AccountController < Ads::Google::MasterController
     customers = get_accounts_graph_with_fields(['CustomerId', 'AccountLabels'])
 
     result = customers[:entries].select {|hash| hash[:customer_id] == customer_id}.first
+
     return result[:account_labels]
   end
 
@@ -170,7 +171,12 @@ class Ads::Google::AccountController < Ads::Google::MasterController
     xml = get_stats_report(customer_id)
     account = Account.get_data_client_accounts(xml)
     als = get_account_label(customer_id)
-    account.account_labels = als
+    
+    # data xml return nil
+    unless account.nil?
+      account.account_labels = als
+    end
+
     account
   end
 
