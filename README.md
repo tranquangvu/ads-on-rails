@@ -1,26 +1,7 @@
-AdWords on Rails
+Ads On Rails
 ================
 
-Google's AdWords API service lets developers design computer programs that
-interact directly with the AdWords platform. With these applications,
-advertisers and third parties can more efficiently -- and creatively -- manage
-their large or complex AdWords accounts and campaigns.
-
-The AdWords on Rails sample application demonstrates how to access the AdWords
-API from within a Ruby on Rails environment. It is based on the [Google Ruby
-AdWords API client library](https://github.com/googleads/google-api-ads-ruby).
-
-If you are new to Rails you can find more information on the
-[official site](http://rubyonrails.org/).
-
-The application demonstrates the following:
-
- - Authorization against AdWords with OAuth schema and credentials re-use.
- - Simple service request (CampaignService.get) and displaying the results.
- - Basic AdHoc reporting functionality with downloads support.
-
-We are sharing this code as open source to provide a starting point for new
-developers and to demonstrate some of the core functionality in the API.
+The application is a simple demo about advertisement management systems for both google adwords and facebook ads which is built base on google-api-ads-ruby support by Google(reference: [https://github.com/googleads/google-api-ads-ruby/tree/master/adwords_api/examples/adwords_on_rails](https://github.com/googleads/google-api-ads-ruby/tree/master/adwords_api/examples/adwords_on_rails)) and Zuck (reference: [https://github.com/moviepilot/zuck](https://github.com/moviepilot/zuck))
 
 
 How do I get started?
@@ -28,23 +9,18 @@ How do I get started?
 
 1. Make sure you have Ruby 2.1 or later installed:
 
-    $ ruby -v
+    ```$ ruby -v```
     ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux]
 
-2. Download the application from [GitHub](https://github.com/googleads/google-api-ads-ruby).
-3. Unpack the contents and change to the application root:
+2. Clone the application to your directory
+3. Change to the application root:
 
-    $ tar xvzf adwords_on_rails-<version>.tar.gz && cd adwords_on_rails
+    ```cd ads-on-rails```
+4. Install all required dependencies using bundle:
 
-4. Install the bundle gem:
+    ```$ bundle install```
 
-    $ gem install bundle
-
-5. Install all required dependencies using bundle:
-
-    $ bundle install
-
-6. Initialize default local SQLite schema:
+6. Initialize default local schema:
 
     $ rake db:migrate
 
