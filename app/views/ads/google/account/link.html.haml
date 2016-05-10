@@ -1,0 +1,49 @@
+%h1 Links Account
+.row
+  .col-lg-6.col-md-6.col-sm-6.col-xs-12
+    = form_tag({ controller: "account", action: "create_link_account" , method: "post" }, { id: 'form' }) do
+      .group
+        = text_area_tag :account_id, nil, rows: 3, placeholder: 'Enter one customer ID one per line.', class: 'form-control'
+        %span{class: "error" } Please enter valid value.
+      = button_tag("Create", type: "submit", class: "btn btn-primary button")
+
+:javascript
+  $(document).ready(function() {
+
+    function checkValidate(str){
+      var reg = /(\d{3}-\d{3}-\d{4};?)+$/gm;
+      
+      return reg.test(str);
+    }
+
+    $('#account_id').on('input', function(){
+      var input = $(this).val();
+      
+      if (checkValidate(input)) {
+        $(this).removeClass("invalid").addClass("valid");
+        $('.group span').removeClass("error-show").addClass("error");
+      } else {
+        $(this).removeClass("valid").addClass("invalid");
+        $('.group span').removeClass("error").addClass("error-show");
+      }
+    });
+
+    $('#form button[type=submit]').click(function(){
+      var valid = $('#form textarea').hasClass("valid");
+      var error = true;
+
+      console.log('valid');
+      console.log(valid);
+
+      if (!valid) {
+        $('.group span').removeClass("error").addClass("error-show");
+        error = false;
+      } else {
+        $('.group span').removeClass("error-show").addClass("error");
+      }
+
+      if (!error){
+        event.preventDefault(); 
+      }
+    });
+  });
