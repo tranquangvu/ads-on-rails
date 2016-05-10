@@ -1,6 +1,6 @@
 ---
 # This is an example configuration file for the AdWords API client library.
-# Please forill in the required fields, and copy it over to your home directory.
+# Please fill in the required fields, and copy it over to your home directory.
 :authentication:
   # Authentication method, for web applications OAuth is recommended.
   :method: OAuth2
@@ -9,9 +9,8 @@
   # Set the OAuth2 client id and secret. Register your application here to
   # obtain these values:
   #   https://console.developers.google.com/
-  
-  :oauth2_client_id: 205729044341-kjgs52b11d3cip7djtm429lgupli60n9.apps.googleusercontent.com
-  :oauth2_client_secret: vVo5G_RFylnJTIhwMjm5IVoY
+  :oauth2_client_id: INSERT_OAUTH2_CLIENT_ID_HERE
+  :oauth2_client_secret: INSERT_OAUTH2_CLIENT_SECRET_HERE
   # Optional, see: https://developers.google.com/accounts/docs/OAuth2WebServer
   #:oauth2_state: INSERT_OAUTH2_STATE_HERE
   #:oauth2_access_type: INSERT_OAUTH2_ACCESS_TYPE_HERE
@@ -19,8 +18,8 @@
   # Callback is set up by the application at runtime.
   #:oauth2_callback: INSERT_OAUTH2_CALLBACK_URL_HERE
 
-  # Other parameters. 
-  :developer_token: _m8DkwzyctoPaAqApjMhxg
+  # Other parameters.
+  :developer_token: INSERT_YOUR_DEVELOPER_TOKEN_HERE
   # If you access only one account you can specify it here.
   # :client_customer_id: INSERT_YOUR_CLIENT_CUSTOMER_ID_HERE
   :user_agent: demo-rails
