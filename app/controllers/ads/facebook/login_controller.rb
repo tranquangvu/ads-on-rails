@@ -1,4 +1,4 @@
-require 'zuck'
+# require 'zuck'
 require 'koala'
 
 class Ads::Facebook::LoginController < Ads::Facebook::MasterController

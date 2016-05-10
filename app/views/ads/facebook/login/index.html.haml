@@ -1,3 +1,3 @@
 %h1 Hello World Login Index
 
-= link_to 'Login', Koala::Facebook::OAuth.new.url_for_oauth_code(:callback => ads_facebook_login_index_url)
+= link_to 'Login', Koala::Facebook::OAuth.new.url_for_oauth_code(:callback => ads_facebook_login_index_url, :scope => "ads_management")
