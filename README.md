@@ -2,7 +2,7 @@ Ads On Rails
 ================
 
 The application is a simple demo about advertisement management systems for both google adwords and facebook ads which is built base on:
-- google-api-ads-ruby support by Google (reference: [https://github.com/googleads/google-api-ads-ruby/tree/master/adwords_api/examples/adwords_on_rails](https://github.com/googleads/google-api-ads-ruby/tree/master/adwords_api/examples/adwords_on_rails))
+- google-api-ads-ruby support by Google (reference: [https://github.com/googleads/google-api-ads-ruby]https://github.com/googleads/google-api-ads-ruby))
 - zuck gem (reference: [https://github.com/moviepilot/zuck](https://github.com/moviepilot/zuck))
 
 Get started
