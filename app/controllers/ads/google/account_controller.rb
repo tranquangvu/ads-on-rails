@@ -29,37 +29,50 @@ class Ads::Google::AccountController < Ads::Google::MasterController
   end
 
   def create_link_account()
-    # Get the AdWords manager account ID.
-    customer_srv = adwords.service(:CustomerService, get_api_version())
-    customer_data = customer_srv.get()
-    adwords.credential_handler.set_credential(:client_customer_id, customer_data[:customer_id])
+    begin
+      # Get the AdWords manager account ID.
+      customer_srv = adwords.service(:CustomerService, get_api_version())
+      customer_data = customer_srv.get()
+      adwords.credential_handler.set_credential(:client_customer_id, customer_data[:customer_id])
 
-    managed_customer_srv = adwords.service(:ManagedCustomerService, get_api_version())
+      managed_customer_srv = adwords.service(:ManagedCustomerService, get_api_version())
 
-    # Get array customer ID & format
-    # example: [2754905814, 2754905814, 2754905814]
-    client_customer_id = params[:account_id].split(/;/).map { |id| id.tr('-', '').to_i }
+      # Get array customer ID & format
+      # example: [2754905814, 2754905814, 2754905814]
+      client_customer_id = params[:account_id].split(/;/).map { |id| id.tr('-', '').to_i }
 
-    operations = [] # List operation to create accounts
+      operations = [] # List operation to create accounts
 
-    # Create list Customers links object
-    client_customer_id.each do |id|
-      customer = {
-        :manager_customer_id => customer_data[:customer_id],
-        :client_customer_id => id,
-        :link_status => 'PENDING'
-      }
+      # Create list Customers links object
+      client_customer_id.each do |id|
+        customer = {
+          :manager_customer_id => customer_data[:customer_id],
+          :client_customer_id => id,
+          :link_status => 'PENDING'
+        }
 
-      # Prepare operation to create an account.
-      operation = {
-        :operator => 'ADD',
-        :operand => customer
-      }
-      operations.push(operation)
+        # Prepare operation to create an account.
+        operation = {
+          :operator => 'ADD',
+          :operand => customer
+        }
+        operations.push(operation)
+      end
+
+      managed_customer_srv.mutate_link(operations)
+      redirect_to ads_google_account_index_path
+    # API errors.
+    rescue AdwordsApi::Errors::ApiException => e
+      puts "Message: %s" % e.message
+      puts 'Errors:'
+      e.errors.each_with_index do |error, index|
+        puts "\tError [%d]:" % (index + 1)
+        error.each do |field, value|
+          puts "\t\t%s: %s" % [field, value]
+        end
+      end
+      redirect_to :back, notice: "It seems non-existent customer id. Please input exist customer ID"
     end
-
-    managed_customer_srv.mutate_link(operations)
-    redirect_to ads_google_account_index_path
   end
 
   def create_account()

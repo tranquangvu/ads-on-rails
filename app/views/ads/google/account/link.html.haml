@@ -3,7 +3,7 @@
   .col-lg-6.col-md-6.col-sm-6.col-xs-12
     = form_tag({ controller: "account", action: "create_link_account" , method: "post" }, { id: 'form' }) do
       .group
-        = text_area_tag :account_id, nil, rows: 3, placeholder: 'Enter one customer ID one per line.', class: 'form-control'
+        = text_field_tag :account_id, nil, placeholder: 'Enter customers ID separated by commas.', class: 'form-control'
         %span{class: "error" } Please enter valid value.
       = button_tag("Create", type: "submit", class: "btn btn-primary button")
 
@@ -29,7 +29,7 @@
     });
 
     $('#form button[type=submit]').click(function(){
-      var valid = $('#form textarea').hasClass("valid");
+      var valid = $('#form input').hasClass("valid");
       var error = true;
 
       console.log('valid');
