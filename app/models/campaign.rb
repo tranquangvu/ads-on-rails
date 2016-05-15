@@ -41,4 +41,25 @@ class Campaign
     end
     campaigns
   end
+
+  def self.get_campaign(xml)
+    doc = Nokogiri::Slop(xml)
+    row = doc.report.table.row
+    Campaign.new({
+      :id => row[:campaignID],
+      :name => row[:campaign],
+      :status => row[:campaignState],
+      :account_currency_code => row[:currency],
+      :amount => row[:budget],
+      :period => row[:budgetPeriod],
+      :impressions => row[:impressions],
+      :clicks => row[:clicks],
+      :ctr => row[:ctr],
+      :average_cpc => row[:avgCPC],
+      :cost => row[:cost],
+      :advertising_channel_type => row[:advertisingChannel],
+      :customer_id => row[:customerID],
+      :customer_name => row[:clientName]
+    })
+  end
 end

@@ -1,7 +1,7 @@
 %h1.text-primary.text-xxxl.text-light
   All Campaigns
 .row
-  = form_tag ads_google_campaigns_filter_path, method: :get, :class => 'form' do
+  = form_tag ads_google_campaigns_path, method: :get, :class => 'form' do
     - unless @selected_account
       .col-lg-12.col-md-12.col-sm-12.col-xs-12
         .form-group
@@ -43,30 +43,17 @@
               %th CTR
               %th Avg. CPC
               %th Cost
-          %tfoot
-            %tr
-              %th ID 
-              %th Campaign
-              %th Client Account
-              %th Budget
-              %th Types
-              %th Status
-              %th Impr
-              %th Clicks
-              %th CTR
-              %th Avg. CPC
-              %th Cost
           %tbody
             - @campaigns.each do |campaign|
               %tr
                 %td
-                  = link_to campaign.id, ads_google_campaign_path(campaign.customer_id, campaign.id)
+                  = link_to campaign.id, ads_google_campaign_show_path(campaign.customer_id, campaign.id)
                 %td
-                  = link_to campaign.name, ads_google_campaign_path(campaign.customer_id, campaign.id)
+                  = link_to campaign.name, ads_google_campaign_show_path(campaign.customer_id, campaign.id)
                 %td
                   = campaign.customer_name
                 %td
-                  = number_with_delimiter(campaign.amount.to_i/1000000).to_s + campaign. account_currency_code + '/' + campaign.period
+                  = number_with_delimiter(campaign.amount.to_i/1000000).to_s + campaign.account_currency_code + '/' + campaign.period
                 %td
                   = campaign.advertising_channel_type
                 %td
