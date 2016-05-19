@@ -15,6 +15,7 @@
     = number_with_delimiter(@campaign.amount.to_i/1000000).to_s + @campaign.account_currency_code + '/' + @campaign.period
 .row
   = form_tag ads_google_campaign_show_path, method: :get, :class => 'form' do
+    = hidden_field_tag 'tab_index', @tab_index
     .col-lg-12.col-md-12.col-sm-12.col-xs-12
       .row
         .col-lg-4.col-md-4.col-sm-6.col-xs-12
@@ -34,14 +35,14 @@
 .card
   .card-head
     %ul.nav.nav-tabs{"data-toggle" => "tabs"}
-      %li.active
+      %li{ :class => @tab_index == 0 ? 'active' : '' }
         = link_to 'Ad groups', '#ad-group'
-      %li
+      %li{ :class => @tab_index == 1 ? 'active' : '' }
         = link_to 'Ads', '#ads'
-      %li
+      %li{ :class => @tab_index == 2 ? 'active' : '' }
         = link_to 'Keywords', '#keywords'
   .card-body.tab-content
-    #ad-group.tab-pane.active
+    #ad-group.tab-pane{ :class => @tab_index == 0 ? 'active' : '' }
       .table-responsive
         %table#adgroups-table.table.table-striped.table-hover
           %thead
@@ -76,14 +77,111 @@
                   = ag.cost
                 %td
                   = ag.avg_position
-    #ads.tab-pane
-      2 ...
-    #keywords.tab-pane
-      3 ...
+    #ads.tab-pane{ :class => @tab_index == 1 ? 'active' : '' }
+      .table-responsive
+        %table#ads-table.table.table-striped.table-hover
+          %thead
+            %tr
+              %th.no-sort Ad
+              %th Ad Group
+              %th Status
+              %th.no-sort Labels
+              %th I.rate
+              %th.no-sort Type
+              %th Clicks
+              %th Impr.
+              %th CTR
+              %th Avg. CPC
+              %th Cost
+              %th Avg. Pos
+          %tbody
+            - @ads.each do |ad|
+              %tr
+                %td
+                  = link_to ad.ad, eval(ad.final_url).first, class: 'btn-link', target: '_blank'
+                  .ad-description1
+                    = ad.description1
+                  .ad-description1
+                    = ad.description2
+                  = link_to ad.display_url, ad.final_url, class: 'btn-link'
+                %td
+                  = ad.ad_group
+                %td
+                  = ad.ad_state
+                %td{style: 'width: 5%;'}
+                  - if ad.labels.eql?('--')
+                    = ad.labels
+                  - else
+                    - eval(ad.labels).each do |label|
+                      %span.badge.style-accent-dark
+                        = label
+                %td
+                  = ad.interaction_rate
+                %td
+                  = ad.ad_type
+                %td
+                  = ad.clicks
+                %td
+                  = ad.impressions
+                %td
+                  = ad.ctr
+                %td
+                  = ad.avg_cpc
+                %td
+                  = ad.cost
+                %td
+                  = ad.avg_position
+    #keywords.tab-pane{ :class => @tab_index == 2 ? 'active' : '' }
+      .table-responsive
+        %table#keywords-table.table.table-striped.table-hover
+          %thead
+            %tr
+              %th Keyword
+              %th Ad Group
+              %th Status
+              %th Max. CPC
+              %th Clicks
+              %th Impr.
+              %th CTR
+              %th Avg. CPC
+              %th Cost
+              %th Avg. Pos
+              %th Labels
+          %tbody
+            - @keywords.each do |kw|
+              %tr
+                %td
+                  = kw.keyword_text
+                %td
+                  = kw.ad_group
+                %td
+                  = kw.keyword_state
+                %td
+                  = kw.max_cpc
+                %td
+                  = kw.clicks
+                %td
+                  = kw.impressions
+                %td
+                  = kw.ctr
+                %td
+                  = kw.avg_cpc
+                %td
+                  = kw.cost
+                %td
+                  = kw.avg_position
+                %td
+                  - if kw.labels.eql?('--')
+                    = kw.labels
+                  - else
+                    - eval(kw.labels).each do |label|
+                      %span.badge.style-accent-dark
+                        = label
 
 :javascript
   // init datatable
-  $('#adgroups-table').DataTable({
+  $('#adgroups-table, #ads-table, #keywords-table').DataTable({
+    columnDefs: [{ targets: 'no-sort', orderable: false }],
     "dom": 'lCfrtip',
     "order": [],
     "colVis": {
@@ -126,3 +224,8 @@
       $('#custom_start_date_group, #custom_end_date_group').hide();
     }
   }
+
+  // get tab's index
+  $('.nav-tabs li').click(function(){
+    $('#tab_index').val($('.nav-tabs li').index($(this)));
+  });

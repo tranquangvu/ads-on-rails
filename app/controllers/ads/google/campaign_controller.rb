@@ -11,8 +11,11 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
   end
 
   def show
-    @campaign = get_specify_campagin(params[:account_id], params[:campaign_id], date_range)
+    @tab_index = params[:tab_index].to_i || 0
+    @campaign = get_specify_campagin(params[:account_id], params[:campaign_id], {:date_range_type => Report::DEFAULT_DATE_RANGE_TYPE})
     @ad_groups = get_ad_groups_of_campaign(params[:account_id], params[:campaign_id], date_range)
+    @ads = get_ads_of_campaign(params[:account_id], params[:campaign_id], date_range)
+    @keywords = get_keywords_of_campaign(params[:account_id], params[:campaign_id], date_range)
   end
 
   def init
@@ -22,7 +25,8 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
   end
 
   def date_range
-    { :date_range_type => @date_range_type,
+    {
+      :date_range_type => @date_range_type,
       :min_date => Date.parse(@custom_start_date).strftime('%Y%m%d'),
       :max_date => Date.parse(@custom_end_date).strftime('%Y%m%d')
     }
@@ -161,5 +165,37 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
       })
       xml = get_report_by_xml(account_id, report_definition)
       AdGroup.get_ad_groups(xml)
+    end
+
+    def get_ads_of_campaign(account_id, campaign_id, date_range)
+      fields = ['Headline', 'Description1', 'Description2', 'DisplayUrl', 'CreativeFinalUrls', 'AdGroupName', 'Status', 'Labels', 'InteractionRate', 'AdType', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition']
+      name = 'AD_PERFORMANCE_REPORT'
+      type = 'AD_PERFORMANCE_REPORT'
+      report_definition = report_definition(fields, name, type, {
+        :date_range => date_range,
+        :predicates => {
+          :field => 'CampaignId',
+          :operator => 'EQUALS',
+          :values => [campaign_id]
+        }
+      })
+      xml = get_report_by_xml(account_id, report_definition)
+      Ad.get_ads(xml)
+    end
+
+    def get_keywords_of_campaign(account_id, campaign_id, date_range)
+      fields = ['Id', 'Criteria', 'AdGroupName', 'Status', 'CpcBid', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition', 'Labels']
+      name = 'KEYWORDS_PERFORMANCE_REPORT'
+      type = 'KEYWORDS_PERFORMANCE_REPORT'
+      report_definition = report_definition(fields, name, type, {
+        :date_range => date_range,
+        :predicates => {
+          :field => 'CampaignId',
+          :operator => 'EQUALS',
+          :values => [campaign_id]
+        }
+      })
+      xml = get_report_by_xml(account_id, report_definition)
+      Keyword.get_keywords(xml)
     end
 end
