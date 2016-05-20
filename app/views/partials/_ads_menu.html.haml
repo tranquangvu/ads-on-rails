@@ -38,10 +38,6 @@
               = link_to ads_google_account_index_path, class: (request.original_fullpath == ads_google_account_index_path ? 'active' : '') do
                 %span.title Accounts
 
-            %li{class: request.original_fullpath == ads_google_account_input_path ? 'active expanded' : ''}
-              = link_to ads_google_account_input_path, class: (request.original_fullpath == ads_google_account_input_path ? 'active' : '') do
-                %span.title Enter Test Account ID
-
             %li{class: request.original_fullpath == ads_google_campaigns_path ? 'active expanded' : ''}
               = link_to ads_google_campaigns_path, class: (request.original_fullpath == ads_google_campaigns_path ? 'active' : '') do
                 %span.title Campaigns
@@ -63,9 +59,6 @@
             %li
               = link_to ads_google_account_index_path do
                 %span.title Accounts
-            %li
-              = link_to ads_google_account_input_path do
-                %span.title Enter Test Account ID
             %li
               = link_to ads_google_campaigns_path do
                 %span.title Campaigns

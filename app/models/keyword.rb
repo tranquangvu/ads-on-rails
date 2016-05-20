@@ -1,11 +1,12 @@
 class Keyword
-  attr_accessor :id, :keyword_text, :ad_group, :keyword_state, :max_cpc, :clicks, :impressions, :ctr, :avg_cpc, :cost, :avg_position, :labels
+  attr_accessor :id, :keyword_text, :ad_group, :keyword_state, :criterion_serving_status, :max_cpc, :clicks, :impressions, :ctr, :avg_cpc, :cost, :avg_position, :labels
 
   def initialize(api_keyword)
     @id = api_keyword[:id]
     @keyword_text = api_keyword[:keyword_text]
     @ad_group = api_keyword[:ad_group]
     @keyword_state = api_keyword[:keyword_state]
+    @criterion_serving_status = api_keyword[:criterion_serving_status]
     @max_cpc = api_keyword[:max_cpc]
     @clicks = api_keyword[:clicks]
     @impressions = api_keyword[:impressions]
@@ -25,6 +26,7 @@ class Keyword
         :keyword_text => row[:keyword],
         :ad_group => row[:adGroup],
         :keyword_state => row[:keywordState],
+        :criterion_serving_status => row[:criterionServingStatus],
         :max_cpc => row[:maxCPC], 
         :clicks => row[:clicks],
         :impressions => row[:impressions],

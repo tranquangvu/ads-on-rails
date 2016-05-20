@@ -168,7 +168,7 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
     end
 
     def get_ads_of_campaign(account_id, campaign_id, date_range)
-      fields = ['Headline', 'Description1', 'Description2', 'DisplayUrl', 'CreativeFinalUrls', 'AdGroupName', 'Status', 'Labels', 'InteractionRate', 'AdType', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition']
+      fields = ['Headline', 'Description1', 'Description2', 'DisplayUrl', 'CreativeFinalUrls', 'AdGroupName', 'Status', 'CreativeApprovalStatus', 'Labels', 'InteractionRate', 'AdType', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition']
       name = 'AD_PERFORMANCE_REPORT'
       type = 'AD_PERFORMANCE_REPORT'
       report_definition = report_definition(fields, name, type, {
@@ -180,11 +180,12 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
         }
       })
       xml = get_report_by_xml(account_id, report_definition)
+      p xml
       Ad.get_ads(xml)
     end
 
     def get_keywords_of_campaign(account_id, campaign_id, date_range)
-      fields = ['Id', 'Criteria', 'AdGroupName', 'Status', 'CpcBid', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition', 'Labels']
+      fields = ['Id', 'Criteria', 'AdGroupName', 'Status', 'SystemServingStatus', 'CpcBid', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition', 'Labels']
       name = 'KEYWORDS_PERFORMANCE_REPORT'
       type = 'KEYWORDS_PERFORMANCE_REPORT'
       report_definition = report_definition(fields, name, type, {

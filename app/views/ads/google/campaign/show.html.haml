@@ -47,6 +47,7 @@
         %table#adgroups-table.table.table-striped.table-hover
           %thead
             %tr
+              %th.no-sort
               %th Ad group
               %th Status
               %th Default Max. CPC
@@ -59,6 +60,11 @@
           %tbody
             - @ad_groups.each do |ag|
               %tr
+                %td
+                  - if ag.state.eql? 'enabled'
+                    %i.fa.fa-dot-circle-o.text-success
+                  - else
+                    %i.fa.fa-dot-circle-o.text-danger
                 %td
                   = ag.name
                 %td
@@ -82,6 +88,7 @@
         %table#ads-table.table.table-striped.table-hover
           %thead
             %tr
+              %th.no-sort
               %th.no-sort Ad
               %th Ad Group
               %th Status
@@ -97,6 +104,11 @@
           %tbody
             - @ads.each do |ad|
               %tr
+                %td
+                  - if ad.ad_state.eql? 'enabled'
+                    %i.fa.fa-dot-circle-o.text-success
+                  - else
+                    %i.fa.fa-dot-circle-o.text-danger
                 %td
                   = link_to ad.ad, eval(ad.final_url).first, class: 'btn-link', target: '_blank'
                   .ad-description1
@@ -136,9 +148,10 @@
         %table#keywords-table.table.table-striped.table-hover
           %thead
             %tr
+              %th.no-sort
               %th Keyword
               %th Ad Group
-              %th Status
+              %th.no-sort Status
               %th Max. CPC
               %th Clicks
               %th Impr.
@@ -146,16 +159,21 @@
               %th Avg. CPC
               %th Cost
               %th Avg. Pos
-              %th Labels
+              %th.no-sort Labels
           %tbody
             - @keywords.each do |kw|
               %tr
+                %td
+                  - if kw.keyword_state.eql? 'enabled'
+                    %i.fa.fa-dot-circle-o.text-success
+                  - else
+                    %i.fa.fa-dot-circle-o.text-danger
                 %td
                   = kw.keyword_text
                 %td
                   = kw.ad_group
                 %td
-                  = kw.keyword_state
+                  = kw.criterion_serving_status.capitalize
                 %td
                   = kw.max_cpc
                 %td
