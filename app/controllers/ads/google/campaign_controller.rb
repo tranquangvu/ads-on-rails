@@ -12,6 +12,7 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
 
   def show
     @tab_index = params[:tab_index].to_i || 0
+    @account_id = params[:account_id]
     @campaign = get_specify_campagin(params[:account_id], params[:campaign_id], {:date_range_type => Report::DEFAULT_DATE_RANGE_TYPE})
     @ad_groups = get_ad_groups_of_campaign(params[:account_id], params[:campaign_id], date_range)
     @ads = get_ads_of_campaign(params[:account_id], params[:campaign_id], date_range)
@@ -168,7 +169,7 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
     end
 
     def get_ads_of_campaign(account_id, campaign_id, date_range)
-      fields = ['Headline', 'Description1', 'Description2', 'DisplayUrl', 'CreativeFinalUrls', 'AdGroupName', 'Status', 'CreativeApprovalStatus', 'Labels', 'InteractionRate', 'AdType', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition']
+      fields = ['Headline', 'Description1', 'Description2', 'DisplayUrl', 'CreativeFinalUrls', 'AdGroupName', 'Status', 'Labels', 'InteractionRate', 'AdType', 'Clicks', 'Impressions', 'Ctr', 'AverageCpc', 'Cost', 'AveragePosition']
       name = 'AD_PERFORMANCE_REPORT'
       type = 'AD_PERFORMANCE_REPORT'
       report_definition = report_definition(fields, name, type, {
@@ -180,7 +181,6 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
         }
       })
       xml = get_report_by_xml(account_id, report_definition)
-      p xml
       Ad.get_ads(xml)
     end
 
