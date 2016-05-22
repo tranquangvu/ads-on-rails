@@ -1,11 +1,6 @@
-// This is a manifest file that'll be compiled into including all the files listed below.
-// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
-// be included in the compiled file accessible from http://example.com/assets/application.js
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// the compiled file.
-//
 //= require jquery
 //= require jquery_ujs
+//= require parsley
 //= require nprogress
 //= require bootstrap-sprockets
 //= require libs/spin.js/spin.min
@@ -35,6 +30,10 @@
 //= require libs/bootstrap-datepicker/bootstrap-datepicker
 //= require libs/select2/select2.min
 
+// =================================
+// COMMON JS
+// =================================
+
 // init progress bar
 NProgress.configure({
   showSpinner: false,
@@ -54,3 +53,58 @@ $(function(){
   NProgress.set(0.2);
   NProgress.done();
 });
+
+// =================================
+// CAMPAIGNS VIEW
+// =================================
+
+$(function(){
+  // init datatable
+  $('#campains-table, #adgroups-table, #ads-table, #keywords-table').DataTable({
+    columnDefs: [{ targets: 'no-sort', orderable: false }],
+    "dom": 'lCfrtip',
+    "order": [],
+    "colVis": {
+      "buttonText": "Columns",
+      "overlayFade": 0,
+      "align": "right"
+    },
+    "language": {
+      "lengthMenu": '_MENU_ entries per page',
+      "search": '<i class="fa fa-search"></i>',
+      "paginate": {
+        "previous": '<i class="fa fa-angle-left"></i>',
+        "next": '<i class="fa fa-angle-right"></i>'
+      }
+    }
+  });
+
+  // init select2 for account selector
+  $('#selected_account_ids').select2();
+
+  // init datepicker
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    todayBtn: true,
+    autoclose: true,
+    todayHighlight: true
+  });
+
+  // toggle show the start_date and end_date input
+  toggleShow();
+  $('#date_range_type').change(toggleShow());
+
+  // current tab's index in campaign's detail
+  $('.nav-tabs li').click(function(){
+    $('#tab_index').val($('.nav-tabs li').index($(this)));
+  });
+});
+
+function toggleShow() {
+  if($('#date_range_type').val() == 'CUSTOM_DATE'){
+    $('#custom_start_date_group, #custom_end_date_group').show();
+  }
+  else{
+    $('#custom_start_date_group, #custom_end_date_group').hide();
+  }
+}

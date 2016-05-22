@@ -144,6 +144,31 @@
                 %td
                   = ad.avg_position
     #keywords.tab-pane{ :class => @tab_index == 2 ? 'active' : '' }
+      %a.btn.ink-reaction.btn-raised.btn-danger{:href => '#', id: 'add-keywords-btn', style: 'margin-bottom: 10px;'}
+        = fa_icon 'plus', text: 'Keywords'
+      .creating-keyword#keywords_create_form
+        .card
+          .card-head.style-primary
+            %header Add keywords
+          .card-body
+            = form_tag ads_google_campaign_keywords_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
+              .form-group
+                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', :required => true
+                = label_tag(:ad_group_id, 'Choose ad group')
+              .form-group.text-default
+                %h3.text-light{:style => 'margin: 0 0 5px 0;'} Add keywords
+                %p{:style => 'margin-bottom: 0;'}
+                  Choose phrases that customers would use to search for your products and services.
+                %p{:style => 'margin-bottom: 0;'}
+                  Control how keywords match to searches with
+                  %span
+                    = link_to 'match types', 'https://support.google.com/adwords/answer/2497836?hl=en&authuser=0', class: 'btn-link'
+              .form-group
+                = text_area_tag :keywords, nil, rows: 3, class: 'form-control', :required => true, placeholder: 'Add your keywords here...'
+                = label_tag(:keywords, 'Enter one keyword per line')
+              .form-group
+                = submit_tag 'Save', class: 'btn btn-raised ink-reaction btn-primary'
+                = link_to 'Cancel', '#', id: 'cancel_keywords_create_form', class: 'btn btn-raised ink-reaction btn-danger'
       .table-responsive
         %table#keywords-table.table.table-striped.table-hover
           %thead
@@ -197,53 +222,17 @@
                         = label
 
 :javascript
-  // init datatable
-  $('#adgroups-table, #ads-table, #keywords-table').DataTable({
-    columnDefs: [{ targets: 'no-sort', orderable: false }],
-    "dom": 'lCfrtip',
-    "order": [],
-    "colVis": {
-      "buttonText": "Columns",
-      "overlayFade": 0,
-      "align": "right"
-    },
-    "language": {
-      "lengthMenu": '_MENU_ entries per page',
-      "search": '<i class="fa fa-search"></i>',
-      "paginate": {
-        "previous": '<i class="fa fa-angle-left"></i>',
-        "next": '<i class="fa fa-angle-right"></i>'
-      }
-    }
+  $('#add-keywords-btn').click(function(e){
+    e.preventDefault();
+
+    $(this).hide();
+    $('#keywords_create_form').slideDown();
   });
 
-  // init select2 for account selector
-  $('#selected_account_ids').select2();
+  $('#cancel_keywords_create_form').click(function(e){
+    e.preventDefault();
 
-  // init datepicker for custom_start_date and custom_end_date input
-  $('.datepicker').datepicker({
-    format: 'yyyy-mm-dd',
-    todayBtn: true,
-    autoclose: true,
-    todayHighlight: true
+    $('#keywords_create_form').slideUp();
+    $('#add-keywords-btn').show();
   });
-
-  // show or hide custom date input
-  toggleShow();
-  $('#date_range_type').change(function(){
-    toggleShow();
-  });
-
-  function toggleShow() {
-    if($('#date_range_type').val() == 'CUSTOM_DATE'){
-      $('#custom_start_date_group, #custom_end_date_group').show();
-    }
-    else{
-      $('#custom_start_date_group, #custom_end_date_group').hide();
-    }
-  }
-
-  // get tab's index
-  $('.nav-tabs li').click(function(){
-    $('#tab_index').val($('.nav-tabs li').index($(this)));
-  });
+  

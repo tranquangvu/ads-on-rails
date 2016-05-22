@@ -62,3 +62,4 @@ gem 'wicked'
 gem 'font-awesome-rails'
 gem 'nprogress-rails'
 gem 'nokogiri', '~> 1.6', '>= 1.6.7.2'
+gem "parsley-rails"

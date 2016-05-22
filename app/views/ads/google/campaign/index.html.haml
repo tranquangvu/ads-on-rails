@@ -70,47 +70,4 @@
                   = campaign.cost
 
 :javascript
-  // init datatable for campains data
-  $('#campains-table').DataTable({
-    "dom": 'lCfrtip',
-    "order": [],
-    "colVis": {
-      "buttonText": "Columns",
-      "overlayFade": 0,
-      "align": "right"
-    },
-    "language": {
-      "lengthMenu": '_MENU_ entries per page',
-      "search": '<i class="fa fa-search"></i>',
-      "paginate": {
-        "previous": '<i class="fa fa-angle-left"></i>',
-        "next": '<i class="fa fa-angle-right"></i>'
-      }
-    }
-  });
-
-  // init select2 for account selector
-  $('#selected_account_ids').select2();
-
-  // init datepicker for custom_start_date and custom_end_date input
-  $('.datepicker').datepicker({
-    format: 'yyyy-mm-dd',
-    todayBtn: true,
-    autoclose: true,
-    todayHighlight: true
-  });
-
-  // show or hide custom date input
-  toggleShow();
-  $('#date_range_type').change(function(){
-    toggleShow();
-  });
-
-  function toggleShow() {
-    if($('#date_range_type').val() == 'CUSTOM_DATE'){
-      $('#custom_start_date_group, #custom_end_date_group').show();
-    }
-    else{
-      $('#custom_start_date_group, #custom_end_date_group').hide();
-    }
-  }
+  

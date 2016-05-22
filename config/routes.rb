@@ -6,6 +6,7 @@ AdwordsOnRails::Application.routes.draw do
     namespace :google do
       get "campaigns", to: "campaign#index"
       get "campaign/:account_id/:campaign_id", to: "campaign#show", as: 'campaign_show'
+      post "campaign/:account_id/:campaign_id/keywords", to: 'keyword#create', as: 'campaign_keywords_create'
 
       get "account/index"
       get "account/input"
