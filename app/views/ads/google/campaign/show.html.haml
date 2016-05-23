@@ -1,7 +1,7 @@
 %h1.text-primary.text-xxxl.text-light
   Campaign: 
   = @campaign.name
-%p.text-warning{style: 'font-size: 15px;'}
+%p.text-accent{style: 'font-size: 15px;'}
   %span
     Status: 
     = @campaign.status
@@ -50,7 +50,7 @@
               %th.no-sort
               %th Ad group
               %th Status
-              %th Default Max. CPC
+              %th Default maxlength. CPC
               %th Clicks
               %th Impr.
               %th CTR
@@ -84,6 +84,56 @@
                 %td
                   = ag.avg_position
     #ads.tab-pane{ :class => @tab_index == 1 ? 'active' : '' }
+      %a.btn.ink-reaction.btn-raised.btn-danger{:href => '#', id: 'add-ads-btn', style: 'margin-bottom: 10px;'}
+        = fa_icon 'plus', text: 'Ads'
+      .creating-keyword#ads_create_form
+        .card
+          .card-head.style-primary
+            %header Add Ads
+          .card-body
+            = form_tag ads_google_campaign_ad_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
+              .form-group
+                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
+                = label_tag(:ad_group_id, 'Choose ad group')
+              .text-default
+                %h2.text-accent.text-light New text ad
+                %p
+                  Write your text ad below. Remember to be clear and specific.
+                  %span
+                    = link_to 'Learn how to write a great text ad', 'https://support.google.com/adwords/answer/1704392?hl=en&authuser=0', class: 'btn-link'
+              .row
+                .col-md-6
+                  .form-group
+                    = text_field_tag :headline, 'Lorem', class: 'form-control', required: true , maxlength: 25, oninput: 'headline_on_input(this)'
+                    = label_tag(:headline, 'Headline')
+                  .form-group
+                    = text_field_tag :description1, 'Clean and close to subway.', class: 'form-control', required: true, maxlength: 35, oninput: 'description1_on_input(this)'
+                    = label_tag(:description1, 'Description line 1')
+                  .form-group
+                    = text_field_tag :description2, 'consectetuer adipiscing elit.', class: 'form-control', required: true, maxlength: 35, oninput: 'description2_on_input(this)'
+                    = label_tag(:description2, 'Description line 2')
+                  .form-group
+                    = text_field_tag :display_url, 'example.com', class: 'form-control', required: true, maxlength: 35, oninput: 'display_url_on_input(this)'
+                    = label_tag(:display_url, 'Display URL')
+                  .form-group
+                    = text_field_tag :final_urls, 'https://example.com', class: 'form-control', required: true, pattern: "(http|https):\/\/[\\w-]+(\.[\\w-]+)+", oninput: 'final_urls_on_input(this)'
+                    = label_tag(:final_urls, 'Final URL')
+                  .form-group
+                    = submit_tag 'Save', class: 'btn btn-raised ink-reaction btn-primary'
+                    = link_to 'Cancel', '#', id: 'cancel_ads_create_form', class: 'btn btn-raised ink-reaction btn-danger'
+                .col-md-6
+                  %h2.text-accent.text-light
+                    Ad preview
+                  %p
+                    The following ad preview may be formatted slightly differently from what is shown to users.
+                    %span
+                      = link_to 'Learn more', 'https://support.google.com/adwords/answer/1704363?hl=en&authuser=0&ctx=newad', class: 'btn-link'
+                  #ad-preview
+                    .headline Lorem - Clean and close to subway.
+                    .display_url
+                      %a{href: 'https://example.com', class: 'btn-link', target: '_blank'} example.com
+                    .description2
+                      consectetuer adipiscing elit.
       .table-responsive
         %table#ads-table.table.table-striped.table-hover
           %thead
@@ -153,18 +203,18 @@
           .card-body
             = form_tag ads_google_campaign_keywords_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
               .form-group
-                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', :required => true
+                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
                 = label_tag(:ad_group_id, 'Choose ad group')
-              .form-group.text-default
-                %h3.text-light{:style => 'margin: 0 0 5px 0;'} Add keywords
+              .text-default
+                %h2.text-accent.text-light Add keywords
                 %p{:style => 'margin-bottom: 0;'}
                   Choose phrases that customers would use to search for your products and services.
-                %p{:style => 'margin-bottom: 0;'}
+                %p
                   Control how keywords match to searches with
                   %span
                     = link_to 'match types', 'https://support.google.com/adwords/answer/2497836?hl=en&authuser=0', class: 'btn-link'
               .form-group
-                = text_area_tag :keywords, nil, rows: 3, class: 'form-control', :required => true, placeholder: 'Add your keywords here...'
+                = text_area_tag :keywords, nil, rows: 3, class: 'form-control', required: true, placeholder: 'Add your keywords here...'
                 = label_tag(:keywords, 'Enter one keyword per line')
               .form-group
                 = submit_tag 'Save', class: 'btn btn-raised ink-reaction btn-primary'
@@ -177,7 +227,7 @@
               %th Keyword
               %th Ad Group
               %th.no-sort Status
-              %th Max. CPC
+              %th maxlength. CPC
               %th Clicks
               %th Impr.
               %th CTR
@@ -222,17 +272,55 @@
                         = label
 
 :javascript
+  // =======================================
+  // keywords create form slide toggle
+  // =======================================
   $('#add-keywords-btn').click(function(e){
     e.preventDefault();
-
     $(this).hide();
     $('#keywords_create_form').slideDown();
   });
 
   $('#cancel_keywords_create_form').click(function(e){
     e.preventDefault();
-
     $('#keywords_create_form').slideUp();
     $('#add-keywords-btn').show();
   });
-  
+
+  // =======================================
+  // ads create form slide toggle
+  // =======================================
+  $('#add-ads-btn').click(function(e){
+    e.preventDefault();
+    $(this).hide();
+    $('#ads_create_form').slideDown();
+  });
+
+  $('#cancel_ads_create_form').click(function(e){
+    e.preventDefault();
+    $('#ads_create_form').slideUp();
+    $('#add-ads-btn').show();
+  });
+
+  // =======================================
+  // oninput of ads create form handle
+  // =======================================
+  function headline_on_input(element){
+    $('#ad-preview .headline').text($(element).val() + ' - ' + $('#description1').val());
+  }
+
+  function description1_on_input(element){
+    $('#ad-preview .headline').text($('#headline').val() + ' - ' + $(element).val());
+  }
+
+  function description2_on_input(element){
+    $('#ad-preview .description2').text($(element).val());
+  }
+
+  function display_url_on_input(element){
+    $('#ad-preview .display_url a').text($(element).val());
+  }
+
+  function final_urls_on_input(element){
+    $('#ad-preview .display_url a').attr('href', $(element).val());
+  }
