@@ -5,7 +5,7 @@ class Ads::Google::KeywordController < Ads::Google::MasterController
       flash[:success] = "Successfully add #{response.length} keywords"
       redirect_to ads_google_campaign_show_path(params[:account_id], params[:campaign_id], tab_index: 2)
     rescue StandardError => e
-      flash[:error] = "Could not save keywords"
+      flash[:error] = e.message
       redirect_to :back
     end
   end
@@ -26,7 +26,7 @@ class Ads::Google::KeywordController < Ads::Google::MasterController
     end
 
     def add_keywords(keywords_text, ad_group_id, account_id)
-      # get api
+      # get api service
       adwords = get_adwords_api
       ad_group_criterion_srv = adwords.service(:AdGroupCriterionService, get_api_version())
 

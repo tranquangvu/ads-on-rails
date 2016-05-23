@@ -43,6 +43,12 @@ body{
   bottom: -20px;
 }
 
-#keywords_create_form{
+#keywords_create_form, #ads_create_form{
   display: none;
+}
+
+#ad-preview{
+  padding: 10px 20px;
+  margin-left: 30px;
+  background: #f5f5f5;
 }
