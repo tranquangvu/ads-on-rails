@@ -1,11 +1,11 @@
 class Ads::Google::AccountController < Ads::Google::MasterController
-  def index()
+  def index
     @selected_account = selected_account
     @accounts = selected_account ? [] : get_all_client_accounts
     @current_account = Account.get_current_account(get_account_list())
   end
 
-  def new()
+  def new
     @countries = Country.all
     @time_zones = TimeZone.where("country_id = ?", Country.first.id)
   end
@@ -19,16 +19,16 @@ class Ads::Google::AccountController < Ads::Google::MasterController
     end
   end
 
-  def select()
+  def select
     self.selected_account = params[:account_id]
     flash[:notice] = "Selected account: %s" % selected_account
     redirect_to ads_google_account_index_path
   end
 
-  def link()
+  def link
   end
 
-  def create_link_account()
+  def create_link_account
     begin
       # Get the AdWords manager account ID.
       customer_srv = adwords.service(:CustomerService, get_api_version())
