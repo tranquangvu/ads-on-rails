@@ -43,6 +43,85 @@
         = link_to 'Keywords', '#keywords'
   .card-body.tab-content
     #ad-group.tab-pane{ :class => @tab_index == 0 ? 'active' : '' }
+      %a.btn.ink-reaction.btn-raised.btn-danger{:href => '#', id: 'add-ad-group-btn', style: 'margin-bottom: 10px;'}
+        = fa_icon 'plus', text: 'Ad Group'
+      #ad_group_create_form
+        .card
+          .card-head.style-primary
+            %header Add Ad Group
+          .card-body
+            = form_tag ads_google_campaign_ad_group_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
+              .text-default
+                %h2.text-accent.text-light Name this ad group
+                %p
+                  An ad group contains one or more ads and a set of related keywords. For best results, try to focus all the ads and keywords in this ad group on one product or service.
+                  %span
+                    = link_to 'Learn more about how to structure your account.', 'https://support.google.com/adwords/answer/1704396?hl=en&authuser=0', class: 'btn-link', target: '_blank'
+              .form-group
+                = text_field_tag :ad_group_name, nil, class: 'form-control', required: true , maxlength: 255, placeholder: 'Type your ad groups name'
+                = label_tag(:ad_group_name, 'Ad group name')
+              .text-default
+                %h2.text-accent.text-light Create an ad
+                %p
+                  To get started, write your first ad below. Remember, you can always create more ads later.
+                  %span
+                    = link_to 'Learn how to write a great text ad', 'https://support.google.com/adwords/answer/1704392?hl=en&authuser=0', class: 'btn-link', target: '_blank'
+              .row
+                .col-md-6
+                  .form-group
+                    = text_field_tag :ad_group_ad_headline, 'Lorem', class: 'form-control', required: true , maxlength: 25, oninput: 'ad_group_ad_headline_on_input(this)'
+                    = label_tag(:ad_group_ad_headline, 'Headline')
+                  .form-group
+                    = text_field_tag :ad_group_ad_description1, 'Clean and close to subway.', class: 'form-control', required: true, maxlength: 35, oninput: 'ad_group_ad_description1_on_input(this)'
+                    = label_tag(:ad_group_ad_description1, 'Description line 1')
+                  .form-group
+                    = text_field_tag :ad_group_ad_description2, 'consectetuer adipiscing elit.', class: 'form-control', required: true, maxlength: 35, oninput: 'ad_group_ad_description2_on_input(this)'
+                    = label_tag(:ad_group_ad_description2, 'Description line 2')
+                  .form-group
+                    = text_field_tag :ad_group_ad_display_url, 'example.com', class: 'form-control', required: true, maxlength: 35, oninput: 'ad_group_ad_display_url_on_input(this)'
+                    = label_tag(:ad_group_ad_display_url, 'Display URL')
+                  .form-group
+                    = text_field_tag :ad_group_ad_final_urls, 'https://example.com', class: 'form-control', required: true, pattern: "(http|https):\/\/[\\w-]+(\.[\\w-]+)+", oninput: 'ad_group_ad_final_urls_on_input(this)'
+                    = label_tag(:ad_group_ad_final_urls, 'Final URL')
+                .col-md-6
+                  %h2.text-accent.text-light
+                    Ad preview
+                  %p
+                    The following ad preview may be formatted slightly differently from what is shown to users.
+                    %span
+                      = link_to 'Learn more', 'https://support.google.com/adwords/answer/1704363?hl=en&authuser=0&ctx=newad', class: 'btn-link', target: '_blank'
+                  #ad-group-ad-preview
+                    .headline Lorem - Clean and close to subway.
+                    .display_url
+                      %a{href: 'https://example.com', class: 'btn-link', target: '_blank'} example.com
+                    .description2
+                      consectetuer adipiscing elit.
+              .text-default
+                %h2.text-accent.text-light Select keywords
+                %p
+                  Your ad can show on Google when people search for the keywords you choose here. These keywords also determine which managed placements are good matches for your ads.
+                  %br
+                  Tips:
+                %ul                  
+                  %li
+                    Start with 10-20 keywords.
+                  %li
+                    Be specific: avoid one-word keywords. Choose phrases that customers would use to search for your products and services.
+                  %li
+                    By default, keywords are broad matched to searches to help you capture a wider range of relevant traffic. Use
+                    %span
+                      = link_to 'match types', 'https://support.google.com/adwords/answer/2497836?hl=en&authuser=0', class: 'btn-link', target: '_blank'
+                    to control this.
+                  %li
+                    Learn more about 
+                    %span
+                      = link_to 'choosing effective keywords.', 'https://support.google.com/adwords/answer/2453981?hl=en&authuser=0', class: 'btn-link', target: '_blank'
+              .form-group
+                = text_area_tag :ad_group_keywords, nil, rows: 3, class: 'form-control', required: true, placeholder: 'Add your keywords here...'
+                = label_tag(:ad_group_keywords, 'Enter one keyword per line')
+              .form-group
+                = submit_tag 'Save', class: 'btn btn-raised ink-reaction btn-primary'
+                = link_to 'Cancel', '#', id: 'cancel_ad_group_create_form', class: 'btn btn-raised ink-reaction btn-danger'
       .table-responsive
         %table#adgroups-table.table.table-striped.table-hover
           %thead
@@ -50,7 +129,7 @@
               %th.no-sort
               %th Ad group
               %th Status
-              %th Default maxlength. CPC
+              %th Default max. CPC
               %th Clicks
               %th Impr.
               %th CTR
@@ -63,12 +142,14 @@
                 %td
                   - if ag.state.eql? 'enabled'
                     %i.fa.fa-dot-circle-o.text-success
-                  - else
+                  - elsif ag.state.eql? 'disabled'
                     %i.fa.fa-dot-circle-o.text-danger
+                  - else
+                    %i.fa.fa-times.text-danger
                 %td
                   = ag.name
                 %td
-                  = ag.state
+                  = ag.state.capitalize
                 %td
                   = ag.default_max_cpc
                 %td
@@ -86,21 +167,21 @@
     #ads.tab-pane{ :class => @tab_index == 1 ? 'active' : '' }
       %a.btn.ink-reaction.btn-raised.btn-danger{:href => '#', id: 'add-ads-btn', style: 'margin-bottom: 10px;'}
         = fa_icon 'plus', text: 'Ads'
-      .creating-keyword#ads_create_form
+      #ads_create_form
         .card
           .card-head.style-primary
             %header Add Ads
           .card-body
             = form_tag ads_google_campaign_ad_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
               .form-group
-                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
+                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups.select{ |g| g.state.eql?('enabled') }, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
                 = label_tag(:ad_group_id, 'Choose ad group')
               .text-default
                 %h2.text-accent.text-light New text ad
                 %p
                   Write your text ad below. Remember to be clear and specific.
                   %span
-                    = link_to 'Learn how to write a great text ad', 'https://support.google.com/adwords/answer/1704392?hl=en&authuser=0', class: 'btn-link'
+                    = link_to 'Learn how to write a great text ad', 'https://support.google.com/adwords/answer/1704392?hl=en&authuser=0', class: 'btn-link', target: '_blank'
               .row
                 .col-md-6
                   .form-group
@@ -127,7 +208,7 @@
                   %p
                     The following ad preview may be formatted slightly differently from what is shown to users.
                     %span
-                      = link_to 'Learn more', 'https://support.google.com/adwords/answer/1704363?hl=en&authuser=0&ctx=newad', class: 'btn-link'
+                      = link_to 'Learn more', 'https://support.google.com/adwords/answer/1704363?hl=en&authuser=0&ctx=newad', class: 'btn-link', target: '_blank'
                   #ad-preview
                     .headline Lorem - Clean and close to subway.
                     .display_url
@@ -157,19 +238,21 @@
                 %td
                   - if ad.ad_state.eql? 'enabled'
                     %i.fa.fa-dot-circle-o.text-success
-                  - else
+                  - elsif ad.ad_state.eql? 'disabled'
                     %i.fa.fa-dot-circle-o.text-danger
+                  - else
+                    %i.fa.fa-times.text-danger
                 %td
                   = link_to ad.ad, eval(ad.final_url).first, class: 'btn-link', target: '_blank'
                   .ad-description1
                     = ad.description1
                   .ad-description1
                     = ad.description2
-                  = link_to ad.display_url, ad.final_url, class: 'btn-link'
+                  = link_to ad.display_url, ad.final_url, class: 'btn-link', target: '_blank'
                 %td
                   = ad.ad_group
                 %td
-                  = ad.ad_state
+                  = ad.ad_state.capitalize
                 %td{style: 'width: 5%;'}
                   - if ad.labels.eql?('--')
                     = ad.labels
@@ -196,14 +279,14 @@
     #keywords.tab-pane{ :class => @tab_index == 2 ? 'active' : '' }
       %a.btn.ink-reaction.btn-raised.btn-danger{:href => '#', id: 'add-keywords-btn', style: 'margin-bottom: 10px;'}
         = fa_icon 'plus', text: 'Keywords'
-      .creating-keyword#keywords_create_form
+      #keywords_create_form
         .card
           .card-head.style-primary
             %header Add keywords
           .card-body
             = form_tag ads_google_campaign_keywords_create_path(@account_id, @campaign.id), method: :post, class: 'form', 'data-parsley-validate' => true do
               .form-group
-                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
+                = select_tag :ad_group_id, options_from_collection_for_select(@ad_groups.select{ |g| g.state.eql?('enabled') }, 'id', 'name'), class: 'form-control', prompt: 'Choose...', required: true
                 = label_tag(:ad_group_id, 'Choose ad group')
               .text-default
                 %h2.text-accent.text-light Add keywords
@@ -212,7 +295,7 @@
                 %p
                   Control how keywords match to searches with
                   %span
-                    = link_to 'match types', 'https://support.google.com/adwords/answer/2497836?hl=en&authuser=0', class: 'btn-link'
+                    = link_to 'match types', 'https://support.google.com/adwords/answer/2497836?hl=en&authuser=0', class: 'btn-link', target: '_blank'
               .form-group
                 = text_area_tag :keywords, nil, rows: 3, class: 'form-control', required: true, placeholder: 'Add your keywords here...'
                 = label_tag(:keywords, 'Enter one keyword per line')
@@ -241,8 +324,10 @@
                 %td
                   - if kw.keyword_state.eql? 'enabled'
                     %i.fa.fa-dot-circle-o.text-success
-                  - else
+                  - elsif kw.keyword_state.eql? 'disabled'
                     %i.fa.fa-dot-circle-o.text-danger
+                  - else
+                    %i.fa.fa-times.text-danger
                 %td
                   = kw.keyword_text
                 %td
@@ -303,6 +388,21 @@
   });
 
   // =======================================
+  // ad groups create form slide toggle
+  // =======================================
+  $('#add-ad-group-btn').click(function(e){
+    e.preventDefault();
+    $(this).hide();
+    $('#ad_group_create_form').slideDown();
+  });
+
+  $('#cancel_ad_group_create_form').click(function(e){
+    e.preventDefault();
+    $('#ad_group_create_form').slideUp();
+    $('#add-ad-group-btn').show();
+  });
+
+  // =======================================
   // oninput of ads create form handle
   // =======================================
   function headline_on_input(element){
@@ -323,4 +423,27 @@
 
   function final_urls_on_input(element){
     $('#ad-preview .display_url a').attr('href', $(element).val());
+  }
+
+  // =======================================
+  // oninput of ad groups create form handle
+  // =======================================
+  function ad_group_ad_headline_on_input(element){
+    $('#ad-group-ad-preview .headline').text($(element).val() + ' - ' + $('#description1').val());
+  }
+
+  function ad_group_ad_description1_on_input(element){
+    $('#ad-group-ad-preview .headline').text($('#headline').val() + ' - ' + $(element).val());
+  }
+
+  function ad_group_ad_description2_on_input(element){
+    $('#ad-group-ad-preview .description2').text($(element).val());
+  }
+
+  function ad_group_ad_display_url_on_input(element){
+    $('#ad-group-ad-preview .display_url a').text($(element).val());
+  }
+
+  function ad_group_ad_final_urls_on_input(element){
+    $('#ad-group-ad-preview .display_url a').attr('href', $(element).val());
   }

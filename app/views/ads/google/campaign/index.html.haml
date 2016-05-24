@@ -32,6 +32,7 @@
         %table#campains-table.table.table-striped.table-hover
           %thead
             %tr
+              %th.no-sort 
               %th Id
               %th Campaign
               %th Client Account
@@ -47,6 +48,13 @@
             - @campaigns.each do |campaign|
               %tr
                 %td
+                  - if campaign.status.eql? 'enabled'
+                    %i.fa.fa-dot-circle-o.text-success
+                  - elsif campaign.status.eql? 'paused'
+                    %i.fa.fa-pause-circle.text-danger
+                  - else
+                    %i.fa.fa-times.text-danger
+                %td
                   = link_to campaign.id, ads_google_campaign_show_path(campaign.customer_id, campaign.id)
                 %td
                   = link_to campaign.name, ads_google_campaign_show_path(campaign.customer_id, campaign.id)
@@ -57,7 +65,7 @@
                 %td
                   = campaign.advertising_channel_type
                 %td
-                  = campaign.status
+                  = campaign.status.capitalize
                 %td
                   = campaign.impressions
                 %td
