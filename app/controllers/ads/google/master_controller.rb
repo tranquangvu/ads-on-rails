@@ -7,12 +7,12 @@ class Ads::Google::MasterController < Ads::AdsController
   private
   
   # Returns the API version in use.
-  def get_api_version()
+  def get_api_version
     return :v201603
   end
 
   # Returns currently selected account.
-  def selected_account()
+  def selected_account
     @selected_account ||= session[:selected_account]
     return @selected_account
   end
@@ -24,21 +24,25 @@ class Ads::Google::MasterController < Ads::AdsController
   end
 
   # Checks if we have a valid credentials.
-  def authenticate()
+  def authenticate
     token = session[:token]
     redirect_to ads_google_login_prompt_path if token.nil?
     return !token.nil?
   end
 
   # Returns an API object.
-  def get_adwords_api()
+  def adwords
+    get_adwords_api
+  end
+
+  def get_adwords_api
     @api ||= create_adwords_api()
     return @api
   end
 
   # Creates an instance of AdWords API class. Uses a configuration file and
   # Rails config directory.
-  def create_adwords_api()
+  def create_adwords_api
     config_filename = File.join(Rails.root, 'config', 'adwords_api.yml')
     @api = AdwordsApi::Api.new(config_filename)
     token = session[:token]

@@ -1,39 +1,42 @@
 %h1.text-primary.text-xxxl.text-light
-  Retrieve a report
-  
-- if @selected_account.nil?
-  .notice No account selected!
-- else
-  See
-  %a{:href => "https://developers.google.com/adwords/api/docs/appendix/reports"}
-    reporting documentation
-  for reports and fields reference. The report will
-  be ran for the last 7 days.
-  %br
-    - if @reports.empty?
-      %ul
-        %li No reports available.
-    - else
-      .report-form
-        = form_tag(ads_google_report_get_path, :method => 'post') do
-          .report-form-item
-            Report:
-            %select{:name => "type"}
-              - @reports.each_pair do |key, report|
-                %option{:value => key}
-                  = report.name
-          .report-form-item
-            Fields:
-            %input{:name => "fields", :size => "80", :value => "ExternalCustomerId, AccountDescriptiveName"}
-          .report-form-item
-            Format:
-            %select{:name => "format"}
-              - @formats.each_pair do |key, format|
-                %option{:value => key}
-                  = format.name
-          .report-form-item
-            %input{:name => "zeroes", :type => "checkbox", :value => "true"}
-              Include zero impressions
-          .report-form-item
-            %input{:type => "submit", :value => "Get report"}
-            
+  Reports Center
+.card
+  .card-head.style-primary
+    %header Creating report
+  .card-body
+    = form_tag ads_google_report_get_path, method: :post, class: 'form', id: 'report_form', 'data-parsley-validate' => true do
+      - if @current_account
+        %h2.text-accent.text-light{:style => 'margin-top: 0;'}
+          Selected account: #{ @current_account.name }
+      - else
+        .form-group
+          = select_tag :selected_account_ids, options_for_select(@all_client_accounts.map{ |acc| [acc[:name], acc[:customer_id]] }, nil), class: 'form-control', prompt: 'Choose one...', required: true
+          = label_tag(:selected_account_ids, 'Choose a account')
+      .form-group
+        = select_tag :type, options_from_collection_for_select(@reports, 'type', 'name'), class: 'form-control', prompt: 'Choose one...', required: true
+        = label_tag :type, 'Choose a report type'
+      .form-group
+        = select_tag :format, options_from_collection_for_select(@formats, 'type', 'name'), class: 'form-control', prompt: 'Choose one...', required: true
+        = label_tag :format, 'Choose a output format'
+      .form-group
+        = button_tag type: 'submit', class: 'btn btn-lg btn-raised ink-reaction btn-accent', id: 'submit-btn' do
+          Get Report
+          %i.md.md-send
+
+:javascript
+  $('#submit-btn').click(function(){
+    if($('#selected_account_ids').val() == ""){
+      $('#s2id_selected_account_ids').css({'background': '#F2DEDE'});
+
+      $('#selected_account_ids').change(function(){
+        if($('#selected_account_ids').val() == ""){
+          $('#s2id_selected_account_ids').css({'background': '#F2DEDE'});
+        }
+        else{
+          $('#s2id_selected_account_ids').css({'background': '#DFF0D8'});
+        }
+      });
+    }
+
+    setTimeout(function(){ NProgress.done(); }, 1000); 
+  });

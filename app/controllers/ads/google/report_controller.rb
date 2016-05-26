@@ -1,6 +1,3 @@
-# See this document for reference:
-#   https://developers.google.com/adwords/api/docs/appendix/reports
-
 class Ads::Google::ReportController < Ads::Google::MasterController
   
   REPORT_DEFINITION_TEMPLATE = {
@@ -14,40 +11,97 @@ class Ads::Google::ReportController < Ads::Google::MasterController
   }
 
   def index
-    @selected_account = selected_account
-    @reports = Report.reports()
-    @formats = ReportFormat.report_formats()
+    if selected_account
+      @current_account = current_account
+      account_out_of_date_handler unless @current_account
+    else
+      @all_client_accounts = all_client_accounts
+      account_out_of_date_handler unless @all_client_accounts
+    end
+    @reports = Report.reports
+    @formats = ReportFormat.report_formats
   end
 
   def get
-    @selected_account = selected_account
-    return if @selected_account.nil?
+    # get seleted is array
+    selected_id = selected_account ? selected_account : params[:selected_account_ids].to_i
 
-    validate_data(params)
+    # get choosed report type
+    report = Report.report_for_type(params[:type])
 
-    api = get_adwords_api()
-    report_utils = api.report_utils()
-    definition = Report.create_definition(REPORT_DEFINITION_TEMPLATE, params)
-    api.include_zero_impressions = true if 'true'.eql?(params[:zeroes])
+    # get choosed report format
+    format = ReportFormat.report_format_for_type(params[:format])
+
     begin
-      # Here we only expect reports that fit into memory. For large reports
-      # you may want to save them to files and serve separately.
-      report_data = report_utils.download_report(definition)
-      format = ReportFormat.report_format_for_type(params[:format])
-      content_type = format.content_type
-      filename = format.file_name(params[:type])
-      send_data(report_data, {:filename => filename, :type => content_type})
+      # build definition
+      api = get_adwords_api()
+      report_utils = api.report_utils()
+      definition = Report.create_definition(REPORT_DEFINITION_TEMPLATE, {
+          :fields => report.fields,
+          :type => report.type,
+          :format => format.type
+        })
+      api.include_zero_impressions = true
+
+      # send report to client to save
+      report_data = report_utils.download_report(definition, selected_id)
+      send_data(report_data, {:filename => format.file_name(report), :type => format.content_type})
     rescue AdwordsApi::Errors::ReportError => e
-      @error = e.message
+      flash.now[:error] = e.message
     end
   end
 
   private
+    def current_account
+      graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
+      if graph != false
+        Account.get_current_account(graph)
+      else
+        return false
+      end
+    end
 
-  def validate_data(data)
-    format = ReportFormat.report_format_for_type(data[:format])
-    raise StandardError, 'Unknown format' if format.nil?
-    report = Report.report_for_type(data[:type])
-    raise StandardError, 'Unknown report type' if report.nil?
-  end
+    def all_client_accounts
+      result = []
+      graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
+      if graph != false
+        if graph[:links] && graph[:entries]
+          ids = graph[:links].map{ |link| link[:client_customer_id] }
+          result = graph[:entries].select{ |e| ids.include?(e[:customer_id]) }
+        end
+        return result
+      else
+        return false
+      end
+    end
+
+    def get_accounts_graph_with_fields(fields)
+      result = nil
+      begin
+        # First get the AdWords manager account ID.
+        customer_srv = adwords.service(:CustomerService, get_api_version())
+        customer = customer_srv.get()
+        adwords.credential_handler.set_credential(:client_customer_id, customer[:customer_id])
+
+        # Then find all child accounts using that ID.
+        managed_customer_srv = adwords.service(:ManagedCustomerService, get_api_version())
+        selector = {:fields => fields}
+
+        # Set result to return
+        result = managed_customer_srv.get(selector)
+      rescue AdwordsApi::Errors::ApiException => e
+        logger.fatal("Exception occurred: %s\n%s" % [e.to_s, e.message])
+        flash.now[:alert] =
+            'API request failed with an error, see logs for details'
+      rescue NoMethodError => e
+        logger.fatal("Exception aaa occurred: %s\n%s" % [e.to_s, e.message])
+        result = false
+      end
+      result
+    end
+
+    def account_out_of_date_handler
+      [:selected_account, :token].each {|key| session.delete(key)}
+      redirect_to ads_google_login_prompt_path, notice: 'Your google authentication is out of date. Authenticate again to continue.' and return
+    end
 end

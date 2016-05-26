@@ -3,13 +3,17 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
 
   def index
     @selected_account = selected_account
-    unless selected_account
+    if selected_account
+      @campaigns = campaigns_of_specify_account(selected_account, date_range)
+    else
       @all_client_accounts = all_client_accounts
-      account_out_of_date_handler unless @all_client_accounts
-      @selected_account_ids = params[:selected_account_ids] || @all_client_accounts.map{ |a| a[:customer_id] }
+      if @all_client_accounts
+        @selected_account_ids = params[:selected_account_ids] || @all_client_accounts.map{ |a| a[:customer_id] }
+        @campaigns = campains_of_list_accounts(@selected_account_ids, date_range)
+      else
+        account_out_of_date_handler    
+      end
     end
-    @campaigns = selected_account ? campaigns_of_specify_account(selected_account, date_range) : campains_of_list_accounts(@selected_account_ids, date_range)
-    account_out_of_date_handler unless @campaigns
   end
 
   def show
@@ -47,10 +51,6 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
     # =================================
     # API Handler
     # =================================
-    def adwords
-      get_adwords_api
-    end
-
     def get_client_customer_id
       adwords.credential_handler.credentials[:client_customer_id]
     end
@@ -70,15 +70,18 @@ class Ads::Google::CampaignController < Ads::Google::MasterController
     def all_client_accounts
       result = []
       graph = get_accounts_graph_with_fields(['CustomerId', 'Name'])
-      if graph && graph[:links] && graph[:entries]
-        ids = graph[:links].map{ |link| link[:client_customer_id] }
-        result = graph[:entries].select{ |e| ids.include?(e[:customer_id]) }
+      if graph != false
+        if graph[:links] && graph[:entries]
+          ids = graph[:links].map{ |link| link[:client_customer_id] }
+          result = graph[:entries].select{ |e| ids.include?(e[:customer_id]) }
+        end
+        return result
+      else
+        return false
       end
-      result
     end
 
     def get_accounts_graph_with_fields(fields)
-      adwords = get_adwords_api()
       result = nil
       begin
         # First get the AdWords manager account ID.

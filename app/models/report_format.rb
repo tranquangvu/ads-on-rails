@@ -15,33 +15,30 @@ class ReportFormat
     }
   }
 
-  attr_reader :id, :name, :content_type, :postfix
+  attr_reader :type, :name, :content_type, :postfix
 
-  def initialize(id, name, content_type, postfix)
-    @id, @name, @content_type, @postfix = id, name, content_type, postfix
+  def initialize(type, name, content_type, postfix)
+    @type, @name, @content_type, @postfix = type, name, content_type, postfix
   end
 
   def self.report_format_for_type(format_type)
-    return get_report_formats()[format_type]
+    report_formats.find{ |x| x.type == format_type }
   end
 
-  def self.report_formats()
-    return get_report_formats()
+  def self.report_formats
+    @@report_formats ||= get_report_formats
   end
 
-  def file_name(report_type)
-    report = Report.report_for_type(report_type)
-    return [report.name, ' Report', @postfix].join()
+  def file_name(report)
+    [report.name, ' Report', @postfix].join()
   end
 
   private
-
-  def self.get_report_formats()
-    @@report_formats ||= REPORT_FORMATS.inject({}) do |result, (key, value)|
-      result[key] = ReportFormat.new(key, value[:name],
-                                     value[:content_type], value[:postfix])
-      result
+    def self.get_report_formats
+      report_formats = []
+      REPORT_FORMATS.each do |k, v|
+        report_formats.push(ReportFormat.new(k, v[:name], v[:content_type], v[:postfix]))
+      end
+      report_formats
     end
-    return @@report_formats
-  end
 end
