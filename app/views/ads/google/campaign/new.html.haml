@@ -1,0 +1,75 @@
+.card
+  .card-head.style-primary
+    %header Add New Campaign
+  .card-body
+    #rootwizard.form-wizard.form-wizard-horizontal
+      = form_tag ads_google_campaign_create_path, method: :post, class: 'form form-validation' do
+        .form-wizard-nav
+          .progress{:style => 'width: 75%;'}
+            .progress-bar.progress-bar-primary
+          %ul.nav.nav-justified
+            %li.active
+              %a
+                %span.step 1
+                %span.title Select campaign settings
+            %li
+              %a
+                %span.step 2
+                %span.title Create ad groups
+            %li
+              %a
+                %span.step 3
+                %span.title Create ads
+            %li
+              %a
+                %span.step 4
+                %span.title Review ad groups
+        .tab-content
+          #tab1.tab-pane.active
+            .form-group
+              = text_field_tag :campaign_name, nil, class: 'form-control', required: true, maxlength: 255, placeholder: 'Type campaign name'
+              = label_tag(:campaign_name, 'Campaign name')
+            .form-group
+              = select_tag :campaign_type, options_for_select(@types, nil), class: 'form-control', prompt: 'Choose a type...', required: true
+              = label_tag(:ad_group_id, 'Choose campaign type')
+          #tab2.tab-pane
+            tab2
+          #tab3.tab-pane
+            tab3
+          #tab4.tab-pane
+            tab4
+        %ul.pager.wizard
+          %li.previous.first
+            %a{:href => "javascript:void(0);"} First
+          %li.previous
+            %a{:href => "javascript:void(0);"} Previous
+          %li.next.last
+            %a{:href => "javascript:void(0);"} Last
+          %li.next
+            %a{:href => "javascript:void(0);"} Next
+
+:javascript
+  $('.form').validate();
+
+  $('#rootwizard').bootstrapWizard({
+    onTabShow: function(tab, navigation, index) {
+      var total = navigation.find('li').length;
+      var current = index + 0;
+      var percent = (current / (total - 1)) * 100;
+      var percentWidth = 100 - (100 / total) + '%';
+
+      navigation.find('li').removeClass('done');
+      navigation.find('li.active').prevAll().addClass('done');
+
+      $('#rootwizard .progress-bar').css({width: percent + '%'});
+      $('.form-wizard-horizontal').find('.progress').css({'width': percentWidth});
+    },
+    onNext: function(tab, navigation, index) {
+      var form = $('#rootwizard').find('.form-validation');
+      var valid = form.valid();
+      if(!valid) {
+        form.data('validator').focusInvalid();
+        return false;
+      }
+    }
+  });

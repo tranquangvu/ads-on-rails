@@ -29,6 +29,7 @@
 //= require libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min
 //= require libs/bootstrap-datepicker/bootstrap-datepicker
 //= require libs/select2/select2.min
+//= require libs/wizard/jquery.bootstrap.wizard.min
 
 // =================================
 // COMMON JS
