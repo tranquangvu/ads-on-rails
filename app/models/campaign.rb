@@ -1,6 +1,12 @@
 class Campaign
   attr_reader :id, :name, :status, :account_currency_code, :amount, :period, :impressions, :clicks, :ctr, :average_cpc, :cost, :advertising_channel_type, :customer_id, :customer_name
 
+  TYPES = {
+    'SEARCH' => 'Search Network only', 
+    'DISPLAY' => 'Display Network only',
+    'SHOPPING' => 'Shoppping'
+  }
+
   def initialize(api_campaign)
     @id = api_campaign[:id]
     @name = api_campaign[:name]

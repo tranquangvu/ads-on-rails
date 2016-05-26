@@ -4,35 +4,42 @@ AdwordsOnRails::Application.routes.draw do
   
   namespace :ads do
     namespace :google do
-      get "campaigns", to: "campaign#index"
-      get "campaign/:account_id/:campaign_id", to: "campaign#show", as: 'campaign_show'
-      post "campaign/:account_id/:campaign_id/keywords", to: 'keyword#create', as: 'campaign_keywords_create'
-      post "campaign/:account_id/:campaign_id/ads", to: 'ad#create', as: 'campaign_ad_create'
-      post "campaign/:account_id/:campaign_id/ad_groups", to: 'ad_group#create', as: 'campaign_ad_group_create'
+      # google campaign paths
+      get 'campaigns', to: 'campaign#index'
+      post 'campaigns', to: 'campaign#create', as: 'campaign_create'
+      get 'campaign/new', to: 'campaign#new', ad: 'campaign_new'
+      get 'campaign/:account_id/:campaign_id', to: 'campaign#show', as: 'campaign_show'
+      post 'campaign/:account_id/:campaign_id/keywords', to: 'keyword#create', as: 'campaign_keywords_create'
+      post 'campaign/:account_id/:campaign_id/ads', to: 'ad#create', as: 'campaign_ad_create'
+      post 'campaign/:account_id/:campaign_id/ad_groups', to: 'ad_group#create', as: 'campaign_ad_group_create'
 
-      get "account/index"
-      get "account/input"
-      get "account/select"
-      get "account/new"
-      get "account/update_time_zone", as: 'update_time_zone'
-      get "account/link", to: "account#link"
+      # google account paths
+      get 'account/index'
+      get 'account/input'
+      get 'account/select'
+      get 'account/new'
+      get 'account/update_time_zone', as: 'update_time_zone'
+      get 'account/link', to: 'account#link'
+      post 'account/create_account'
+      post 'account/create_link_account'
 
-      get "login/prompt"
-      get "login/callback"
-      get "login/logout"
+      # google authentication paths
+      get 'login/prompt'
+      get 'login/callback'
+      get 'login/logout'
 
-      get "report/index"
-      post "report/get"
-      post "account/create_account"
-      post "account/create_link_account"
+      # google reporting paths
+      get 'report/index'
+      post 'report/get'
       
-      root "account#index"
+      # google root paths
+      root 'account#index'
     end
 
-    get "global_dashboard/index"
-    root "global_dashboard#index"
+    # global google and facebook ads paths
+    root 'global_dashboard#index'
   end
 
-  get "home/index"
-  root "home#index"
+  # home page path
+  root 'home#index'
 end
