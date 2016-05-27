@@ -1,6 +1,337 @@
 /*
  *= require_self
  */
-
+@import "bootstrap";
 @import "bootstrap-sprockets";
-@import "bootstrap-cover";
+@import "font-awesome";
+
+//===============================================
+// Custom font import
+//===============================================
+@import url(https://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,700,700italic,400italic,900,900italic);
+@import url(https://fonts.googleapis.com/css?family=Poiret+One);
+
+//===============================================
+// Variablle define
+//===============================================
+$white: #FFFFFF;
+$text_grey: #7D7D7D;
+$link_grey: #4A4A4A;
+$link_grey_hover: #111;
+$text_grey_lighten_1: #9EABB3;
+
+//===============================================
+// Common
+//===============================================
+html, body{
+  width: 100%;
+  height: 100%;
+}
+
+body{
+  color: $text_grey;
+  line-height: 1.75 !important;
+  overflow-x: hidden !important;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+}
+
+a{
+  text-decoration: none !important;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.align-center{
+  text-align: center;
+}
+
+.font-poiret-one{
+  font-family: 'Poiret One', cursive;
+}
+
+.btn-oval{
+  padding: 10px 65px;
+  margin: 15px 0;
+  background: #4caf50;
+  display: inline-block;
+  border-radius: 30px;
+  font-family: 'Poiret One', cursive;
+  font-weight: bold;
+  color: $white !important;
+  letter-spacing: 3px;
+  transition: all ease .3s;
+}
+
+.btn-oval:hover{
+  background: #388e3c;
+}
+
+.top-navbar{
+  width: 100%;
+  margin: 15px 0;
+  position: absolute;
+  background: transparent;
+
+  li a{
+    color: $white;
+    padding: 15px 0 2.5px 0;
+    margin: 0 15px;
+    text-transform: uppercase;
+
+    &:hover, &:focus{
+      background: transparent;
+      border-bottom: 2px solid $white;
+    }
+  }
+}
+
+.navbar-brand{
+  padding: 0 15px;
+}
+
+.header{
+  background: asset_url("home_header.jpg") no-repeat center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+
+  .cover{
+    width: 100%;
+    height: 100%;
+    display: table;
+    background: rgba(120, 122, 159, .75);
+
+    .intro{
+      padding: 0 10%;
+      display: table-cell;
+      vertical-align: middle;
+      float: none !important;
+      color: $white;
+
+      .title{
+        font-size: 55px;
+        color: $white !important;
+      }
+
+      .description{
+        font-weight: 300;
+      }
+    }
+
+    .scroll-down{
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      margin-left: -30px;
+      margin-top: -30px;
+      border: 1px solid #fff;
+      border-radius: 100%;
+      animation: bounce 4s 2s infinite;
+    }
+
+    .scroll-down i{
+      font-size: 40px;
+      color: #fff;
+      padding: 10px 17px;
+    }
+  }
+}
+
+/* Used to bounce .scroll-down on home page */
+@-webkit-keyframes bounce {
+  0%, 10%, 25%, 40%, 50% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  20% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px);
+  }
+  30% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px);
+  }
+  60% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+}
+
+.section{
+  padding: 30px 0;
+
+  .section-header{
+    font-size: 35px;
+    letter-spacing: 3px;
+    font-weight: 300;
+    margin-bottom: 30px;
+
+    span {
+      display: inline-block;
+      position: relative;
+
+      &:before, &:after{
+        content: "";
+        position: absolute;
+        height: 5px;
+        border-bottom: 1px solid $text_grey;
+        border-top: 1px solid $text_grey;
+        top: 50%;
+        width: 500px;
+      }
+
+      &:before {
+        right: 100%;
+        margin-right: 15px;
+      }
+
+      &:after {
+        left: 100%;
+        margin-left: 15px;
+      }
+    }
+  }
+}
+
+.card{
+  .img-header{
+    width: 100%;
+    margin-bottom: 20px;
+
+    img{
+      width: 100%;
+    }
+  }
+
+  .card-header{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Poiret One', cursive;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+
+  .card-body{
+    color: #ADADAD;
+    padding: 0 30px;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+}
+
+#contact-section{
+  background: asset_url("contact.jpg");
+  background-size: cover;
+
+  .section-header{
+    span{
+      &:before, &:after{
+        border-color: #fff;
+        width: 475px;
+      }
+    }
+  }
+}
+
+.contact-form{
+  padding: 0 15%;
+  margin: 20px 0 20px 0;
+}
+
+.contact-form .form-group{
+  margin-bottom: 25px;
+}
+
+.contact-form textarea{
+  max-width: 100% !important;
+}
+
+.contact-form .form-control{
+  border-radius: 0;
+  padding: 25px 15px;
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  transition: all ease .3s;
+}
+
+.contact-form .form-control:focus{
+  box-shadow: 0 0 10px #fff;
+}
+
+.contact-form .form-control::-webkit-input-placeholder{
+  color: #e0e0e0;
+}
+
+.contact-form .form-control:-moz-placeholder{
+  color: #e0e0e0;
+}
+
+.contact-form .form-control::-moz-placeholder{
+  color: #e0e0e0;
+}
+
+.contact-form .form-control:-ms-input-placeholder{
+  color: #e0e0e0;  
+}
+
+.contact-form .btn-oval{
+  border: none;
+  background: #5c6bc0;
+}
+
+.contact-form .btn-oval:hover{
+  background: #3949ab; 
+}
+
+.footer{
+  background: #262626;
+  padding: 20px 0;
+  color: #bdbdbd;
+  font-size: 12px;
+
+}
+
+.footer .social-links{
+  list-style: none;
+  padding: 0;
+}
+
+.footer .social-links li{
+  display: inline-block; 
+  margin: 0 5px;
+}
+
+.footer .social-links li a{
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: #bdbdbd;
+  font-size: 16px;
+  color: #262626;
+  border-radius: 100%;
+}
+
+.footer .social-links li a:hover{
+  background: #fff;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.16), 0 4px 10px 0 rgba(255, 255, 255, 0.12);
+}
+
+.footer .social-links li a i{
+  margin: 7px 0;
+}

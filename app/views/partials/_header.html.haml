@@ -1,0 +1,18 @@
+.nav-container
+  .navbar.top-navbar
+    .container
+      .navbar-header
+        %button.navbar-toggle.collapsed{"aria-controls" => "navbar", "aria-expanded" => "false", "data-target" => "#navbar", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        = link_to image_tag("logo.png", alt:"logo_img", class: "navbar-brand"), root_path
+      #navbar.navbar-collapse.collapse
+        %ul.nav.navbar-nav.navbar-right
+          - unless user_signed_in?
+            %li
+              = link_to "Sign Up", new_user_registration_path
+            %li
+              = link_to "Login", new_user_session_path
+              
