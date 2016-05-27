@@ -2,10 +2,9 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 
-// =================================
-// COMMON JS
-// =================================
-
-$(function(){
-  window.setTimeout(function() { $(".alert").alert('close'); }, 5000);  
+$(document).on('click', 'a[href^="#"]', function(e) {
+  var id = $($(this).attr('href'));
+  if (id.size() === 0) return;
+  e.preventDefault();
+  $('body, html').animate({scrollTop: id.offset().top}, 800);
 });

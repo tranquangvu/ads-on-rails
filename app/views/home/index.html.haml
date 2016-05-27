@@ -1,3 +1,56 @@
-%h1 This is home page
-
-%p It will auto go to ads_root_path after login
+%header.header
+  .cover
+    .intro.align-center
+      %h1
+        = link_to "All-in-One Advertising Platform", root_path, class: "title font-poiret-one bold"
+      %h3.description
+        CREATE, OPTIMIZE, AND REPORT ACROSS YOUR SEARCH AND SOCIAL ADS IN ONE PLACE
+      = link_to 'START NOW', new_user_session_path, class: 'btn-oval'
+    = link_to "#content", class: "scroll-down" do
+      = fa_icon "angle-double-down"
+#content
+  %section.section.align-center
+    %h2.section-header
+      %span
+        BENEFITS
+    .section-body
+      .container
+        .row
+          .col-md-4
+            .card
+              .img-header
+                = image_tag 'benefit-1.png'
+              .card-header
+                SIMPLIFIED WORKFLOW
+              .card-body
+                Bring your ads together in a single platform to reach your ideal customers faster
+          .col-md-4
+            .card
+              .img-header
+                = image_tag 'benefit-2.png'
+              .card-header
+                AUTOMATION
+              .card-body
+                Continuously improve the performance of your search and social ads with automation
+          .col-md-4
+            .card
+              .img-header
+                = image_tag 'benefit-3.png'
+              .card-header
+                CROSS-CHANNEL VIEWS
+              .card-body
+                Never spend another minute combining Excel spreadsheets for your search and social ads
+  %section#contact-section.section.align-center
+    %h2.section-header{ :style => 'color: #fff;' }
+      %span
+        CONTACT US
+    .container
+      %form.contact-form
+        .form-group
+          %input.form-control{:placeholder => "Email", :type => "text"}
+        .form-group
+          %input.form-control{:placeholder => "Title", :type => "text"}
+        .form-group
+          %textarea.form-control{:placeholder => "Message", :rows => "8"}
+        .form-group
+          %input.btn-oval{:type => "submit", :value => "SEND NOW"}

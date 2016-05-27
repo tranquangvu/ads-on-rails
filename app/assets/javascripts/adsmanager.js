@@ -48,7 +48,7 @@ window.onbeforeunload = function(e) {
 
 $(function(){
   // set timeout for alert close
-  window.setTimeout(function() { $(".message").alert('close'); }, 5000);
+  window.setTimeout(function() { $(".message").alert('close'); }, 8000);
 
   // done progress bar when page loaded
   NProgress.set(0.2);
@@ -58,7 +58,6 @@ $(function(){
 // =================================
 // CAMPAIGNS VIEW
 // =================================
-
 $(function(){
   // init datatable
   $('#campains-table, #adgroups-table, #ads-table, #keywords-table').DataTable({

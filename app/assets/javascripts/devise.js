@@ -6,5 +6,5 @@
 //= require core/source/AppForm
 
 $(function(){
-  window.setTimeout(function() { $(".alert").alert('close'); }, 2000);  
+  window.setTimeout(function() { $(".alert").alert('close'); }, 5000);  
 });

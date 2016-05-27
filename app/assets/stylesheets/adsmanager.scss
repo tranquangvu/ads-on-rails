@@ -1,7 +1,6 @@
 /*
  *= require_self
  */
- 
 @import "bootstrap-sprockets";
 @import "bootstrap-cover";
 @import "nprogress";
@@ -17,14 +16,23 @@
 @import "libs/bootstrap-datepicker/datepicker3";
 @import "libs/select2/select2";
 @import "libs/wizard/wizard";
-@import "app_fonts";
-@import "account";
 @import "parsley";
 
+//===============================================
+// Custom font import
+//===============================================
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
+
+//===============================================
+// Common
+//===============================================
 body{
   background: #fff;
 }
 
+//===============================================
+// Google campiagns
+//===============================================
 .datepicker{
   border-radius: 0 !important;
 }
@@ -52,4 +60,28 @@ body{
   padding: 10px 20px;
   margin-left: 30px;
   background: #f5f5f5;
+}
+
+//===============================================
+// Google Account
+//===============================================
+.card {
+  margin-top: 15px;
+}
+
+.group {
+  width: 100%;
+}
+
+.group .error {
+  display: none;
+}
+
+.group .error-show {
+  font-size: 14px;
+  color: #f22314;
+}
+
+.button {
+  margin-top: 20px;
 }
