@@ -30,6 +30,18 @@ body{
   background: #fff;
 }
 
+.noty{
+  width: 300px;
+  position: fixed;
+  right: 15px;
+  bottom: 50px;
+  z-index: 999;
+  border-radius: 0;
+  border: none;
+  padding: 20px 30px 20px 15px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26),0 2px 10px 0 rgba(0,0,0,0.22);
+}
+
 //===============================================
 // Google campiagns
 //===============================================

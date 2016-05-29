@@ -8,3 +8,5 @@ $(document).on('click', 'a[href^="#"]', function(e) {
   e.preventDefault();
   $('body, html').animate({scrollTop: id.offset().top}, 800);
 });
+
+window.setTimeout(function() { $(".alert").alert('close'); }, 8000);
